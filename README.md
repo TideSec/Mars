@@ -59,9 +59,3 @@ tips:只是有个了大体框架，很多功能才刚刚开始~~
 
 
 
-
-# 和我联系
-
-**和我联系：**
-
-<div align=center><img src=images/zjwf.png width=30% ></div>
