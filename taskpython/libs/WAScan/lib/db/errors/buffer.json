@@ -1,0 +1,1 @@
+{"info":{"name":"BOF","regexp":["\\*\\*\\* stack smashing detected \\*\\*\\*:","\\<html\\>\\<head\\>\n\\<title\\>500 Internal Server Error\\<\\/title\\>\n","Internal Server Error\\<\\/h1\\>"]}}

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
+        <link rel="stylesheet" type="text/css" href="static/css/main.css">
+    <!-- Font-icon css-->
+        <link rel="stylesheet" type="text/css" href="static/font/css/font-awesome.min.css">
+          <link rel="icon" type="image/x-icon" class="js-site-favicon" href="static/css/img/favicon.ico">
+
+        <title>Mars - Login</title>
+    </head>
+
+    <body>
+        <section class="material-half-bg">
+            <div class="cover"></div>
+        </section>
+
+        <section class="lockscreen-content">
+            <div class="lock-box">
+                <p class="text-center text-muted">Account Locked</p>
+                <form class="unlock-form" action="" method="post">
+                    <div class="form-group">
+                        <label class="control-label">PASSWORD</label>
+                        <input class="form-control" type="password" value="tidesec" name="password">
+                    </div>
+
+                    <div class="form-group btn-container">
+                        <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-lock fa-lg"></i>Login </button>
+                    </div>
+                </form>
+
+            </div>
+        </section>
+
+        <script src="static/js/jquery/jquery-3.2.1.min.js"></script>
+        <script src="static/js/popper.min.js"></script>
+        <script src="static/js/bootstrap/bootstrap.min.js"></script>
+        <script src="static/js/main.js"></script>
+        <script src="static/js/plugins/pace.min.js"></script>
+        <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="static/js/gtag.js?id=UA-120816702-1"></script>
+        <script>
+        	window.dataLayer = window.dataLayer || [];
+        	function gtag(){dataLayer.push(arguments);}
+        	gtag('js', new Date());
+        	gtag('config', 'UA-120816702-1');
+    	</script>
+
+        <script>
+            $(function () {
+                $(".login").click(function() {
+                    const data = {
+                        "password": $('[name="password"]').val()
+                    };
+                    $.ajax({
+                      type: "POST",
+                      url: "/login",
+                      data: data,
+                      success: function(e){
+                          if (e === "success") {
+                            swal({
+                                title: "Successfully",
+                                text: "",
+                                type: "success",
+                                timer: 700,
+                                confirmButtonText: "OK",
+                                closeOnConfirm: false
+                            },
+                            function(){
+                                location.href = "/index";
+                            });
+                        } else {
+                            swal({
+                                title: e,
+                                text: "",
+                                type: "error",
+                                confirmButtonColor: "#DD6B55",
+                                confirmButtonText: "Cancel",
+                                closeOnConfirm: false
+                            },
+                            function(){
+                                location.href = "/login";
+                            });
+                        }
+                      }
+                   });
+                });
+            });
+
+        </script>
+    <script type="text/javascript" src="//js.users.51.la/20781951.js"></script>
+    </body>
+</html>

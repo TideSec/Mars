@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% block css %}
+{% endblock %}
+{% block content %}
+
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-edit"></i>添加资产</h1>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item"><a href="#">添加资产</a></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="row">
+                    <div class="col-lg-2">
+
+                    </div>
+                    <div class="col-lg-8">
+                        <form class="form-horizontal">
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">所属客户<span class="text-danger">*</span></label>
+                                <div class="col-md-8">
+                                <select class="form-control col-md-7" title="所属客户" name="asset_cus_id">
+
+                                    {% for i in cus_data %}
+                                        <option value={{ i['_id'] }}_{{ i['cus_name'] }}>{{ i['cus_name'] }}</option>
+                                    {% endfor %}
+                                </select>
+                                </div>
+                            </div>
+{#                            <div class="form-group row">#}
+{#                                <label class="control-label col-md-3">资产名称<span class="text-danger">*</span></label>#}
+{#                                <div class="col-md-8">#}
+{#                                    <input class="form-control" name="asset_name" type="text" placeholder="资产名称">#}
+{#                                </div>#}
+{#                            </div>#}
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">资产列表<span class="text-danger">*</span></label>
+                                <div class="col-md-8">
+                                    <textarea class="form-control" name="asset_host" rows="8"  placeholder="Example:&#13;&#10;192.168.1.1&#13;&#10;192.168.1.0/24&#13;&#10;www.example.com&#13;&#10;填入想探测的资产，系统会自动分类"></textarea>
+                                </div>
+                            </div>
+
+{#                            <div class="form-group row">#}
+{#                                <label class="control-label col-md-3">每行作为一个单独资产</label>#}
+{#                                <div class="toggle lg col-md-8">#}
+{#                                    <label>#}
+{#                                        <input type="checkbox" name="split_asset" checked><span class="button-indecator"></span>#}
+{#                                    </label>#}
+{#                                </div>#}
+{#                            </div>#}
+
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">操作人员<span class="text-danger">*</span></label>
+                                <div class="col-md-8">
+                                   <input class="form-control" name="admin_name" type="text" placeholder="标记操作人员信息，方便检索">
+                                </div>
+                            </div>
+
+                             <div class="form-group row">
+                                    <label class="control-label col-md-3">任务周期 </label>
+                                <div class="col-md-9">
+                                    <select class="form-control col-md-6" name="asset_scan_zhouqi" title="Recursion">
+                                        <option value="0">一次</option>
+                                        <option value="7">每周</option>
+                                        <option value="1">每天</option>
+                                        <option value="30">每月</option>
+                                        <option value="90">每季度</option>
+                                        <option value="180">每半年</option>
+                                        <option value="365">每年</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">开启探测</label>
+                                <div class="toggle lg col-md-8">
+                                    <label>
+                                        <input type="checkbox" name="enable_check" checked><span class="button-indecator">开启探测后才会进行资产发现和探测</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">web端口快速探测</label>
+                                <div class="toggle lg col-md-8">
+                                    <label>
+                                        <input type="checkbox" name="domain_fast_port_scan" checked><span class="button-indecator">默认开启快速探测部分端口，关闭后会探测全部端口，速度较慢</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">探测C段</label>
+                                <div class="toggle lg col-md-8">
+                                    <label>
+                                        <input type="checkbox" name="c_scan"><span class="button-indecator">开启后会智能探测C段</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">C段端口快速探测</label>
+                                <div class="toggle lg col-md-8">
+                                    <label>
+                                        <input type="checkbox" name="c_fast_port_scan" checked><span class="button-indecator">"探测C段"开启时有效，开启后会在C段扫描时探测部分端口，关闭后会探测全部端口</span>
+                                    </label>
+                                </div>
+                            </div>
+
+
+                        </form>
+                        <div class="tile-footer">
+                            <button class="btn btn-primary " id="newAsset" type="button">提交</button>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% block js %}
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="static/js/plugins/select2.min.js"></script>
+    <script src="static/js/server/new-asset.js"></script>
+{% endblock %}
+{% endblock %}

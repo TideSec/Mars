@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block css %}
+    <link href="static/css/duallistbox/bootstrap-duallistbox.css" rel="stylesheet">
+
+{% endblock %}
+{% block content %}
+
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-edit"></i> 弱口令检测</h1>
+            <p>创建弱口令检测任务</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item"><a href="#">Auth Tester</a></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="row">
+                    <div class="col-lg-2">
+                    </div>
+                    <div class="col-lg-8">
+                        <form class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">任务名称 <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="task_name" type="text" placeholder="任务名称">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">任务周期 </label>
+                                <div class="col-md-9">
+                                    <select class="form-control col-md-6" name="recursion" title="Recursion">
+                                        <option value="0">一次</option>
+                                        <option value="1">每天</option>
+                                        <option value="7">每周</option>
+                                        <option value="30">每月</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">参数 </label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="args" title="Args" placeholder="默认留空即可，也可添加参数如-t 20进行设置线程数、-s 2121设置非标准端口等"/>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">协议选择 <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <select multiple="multiple" size="7" name="service_list" title="Protocols">
+                                        {% for a in protocols %}
+                                            <option value="{{ a }}">{{ a | upper }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">手工添加目标 <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <textarea class="form-control" name="target_list" rows="8" placeholder="Example:&#13;&#10;192.168.1.1&#13;&#10;192.168.1.0/24&#13;&#10;www.example.com"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">用户名 & 密码 <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <textarea class="form-control" placeholder="One username per line" rows="6" name="username_list">{{ username_list }}</textarea>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <textarea class="form-control" placeholder="One password per line" rows="6" name="password_list">{{ password_list }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <button class="btn btn-primary" id="newAuth" type="button"><i class="fa fa-fw fa-lg fa-check-circle"></i>添加任务</button>
+                        </form>
+
+                    </div>
+                    <div class="col-md-2">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% block js %}
+    <script src="static/js/jquery/jquery.bootstrap-duallistbox.js"></script>
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="static/js/server/new-auth-tester.js"></script>
+{% endblock %}
+{% endblock %}

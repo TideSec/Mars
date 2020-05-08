@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Mars</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
+    {% block css %}
+
+    {% endblock %}
+  <link rel="icon" type="image/x-icon" class="js-site-favicon" href="static/css/img/favicon.ico">
+
+    <link rel="stylesheet" type="text/css" href="static/css/main.css">
+    <link rel="stylesheet" type="text/css" href="static/css/font-awesome-4.7.0/css/font-awesome.css">
+
+</head>
+
+<body class="app sidebar-mini rtl">
+    <!-- Navbar-->
+
+    <header class="app-header"><a class="app-header__logo" href="index">Mars(战神)</a>
+      <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
+      <!-- Navbar Right Menu-->
+        <ul class="app-nav">
+            <li class="app-search">
+                <form method="post" action="search">
+                    <input class="app-search__input" type="search" name="search" placeholder="Search">
+                    <button class="app-search__button search_btn" type="submit"><i class="fa fa-search"></i></button>
+                </form>
+            </li>
+        <!--Notification Menu-->
+            <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Show notifications"><i class="fa fa-bell-o fa-lg"></i></a>
+                <div id="notification_update">
+
+                </div>
+            </li>
+
+            <!-- User Menu-->
+            <li class="dropdown"><a class="app-nav__item" href="#" data-toggle="dropdown" aria-label="Open Profile Menu"><i class="fa fa-user fa-lg"></i></a>
+                <ul class="dropdown-menu settings-menu dropdown-menu-right">
+                    <li><a class="dropdown-item" href="advanced-option"><i class="fa fa-cog fa-lg"></i> 设置</a></li>
+                    <li><a class="dropdown-item" href="http://mars.tidesec.net" target="_blank"><i class="fa fa-user fa-lg"></i> 关于</a></li>
+                    <li><div class="dropdown-divideDataTabler"></div><a class="dropdown-item" href="login-out"><i class="fa fa-sign-out fa-lg"></i> 退出</a></li>
+                </ul>
+
+            </li>
+        </ul>
+    </header>
+    <!-- Sidebar menu-->
+    <div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+    <aside class="app-sidebar">
+
+        <ul class="app-menu">
+            <li>
+                <a class="app-menu__item" href="dashboard">
+                    <i class="app-menu__icon fa fa-dashboard"></i>
+                    <span class="app-menu__label">仪表面板</span>
+                </a>
+            </li>
+
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview">
+                    <i class="app-menu__icon fa fa-paw"></i>
+                    <span class="app-menu__label">客户管理</span>
+                    <i class="treeview-indicator fa fa-angle-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a class="treeview-item" href="new-customer"><i class="icon fa fa-edit"></i>添加客户</a></li>
+                    <li><a class="treeview-item" href="cus-management"><i class="icon fa fa-indent"></i>客户列表</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview">
+                    <i class="app-menu__icon fa fa-empire"></i>
+                    <span class="app-menu__label">资产管理</span>
+                    <i class="treeview-indicator fa fa-angle-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a class="treeview-item" href="new-asset"><i class="icon fa fa-edit"></i>添加资产</a></li>
+                    <li><a class="treeview-item" href="asset-management"><i class="icon fa fa-indent"></i>资产任务</a></li>
+                    <li><a class="treeview-item" href="asset-services"><i class="icon fa fa-circle-o"></i>资产列表</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview">
+                    <i class="app-menu__icon fa fa-gitlab"></i>
+                    <span class="app-menu__label">POC检测</span>
+                    <i class="treeview-indicator fa fa-angle-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a class="treeview-item" href="new-scan"><i class="icon fa fa-edit"></i>新建任务</a></li>
+                    <li><a class="treeview-item" href="task-management"><i class="icon fa fa-indent"></i>任务列表</a></li>
+                    <li><a class="treeview-item" href="vulnerability"><i class="icon fa fa-circle-o"></i> 漏洞管理</a></li>
+                    <li><a class="treeview-item" href="plugin-management"><i class="icon fa fa-bug"></i>POC管理</a></li>
+                </ul>
+            </li>
+
+
+
+
+{#            <li class="treeview">#}
+{#                <a class="app-menu__item" href="#" data-toggle="treeview">#}
+{#                    <i class="app-menu__icon fa fa-yelp"></i>#}
+{#                    <span class="app-menu__label">子域枚举</span>#}
+{#                    <i class="treeview-indicator fa fa-angle-right"></i>#}
+{#                </a>#}
+{#                <ul class="treeview-menu">#}
+{#                    <li><a class="treeview-item" href="subdomain-brute"><i class="icon fa fa-pencil"></i>新的域名</a></li>#}
+{#                    <li><a class="treeview-item" href="subdomain-list"><i class="icon fa fa-indent"></i>域名列表</a></li>#}
+{#                </ul>#}
+{#            </li>#}
+
+
+            <!--<li class="treeview">-->
+                <!--<a class="app-menu__item" href="#" data-toggle="treeview">-->
+                   <!--<i class="app-menu__icon fa fa-crop"></i>-->
+                    <!--<span class="app-menu__label">安全监测</span>-->
+                    <!--<i class="treeview-indicator fa fa-angle-right"></i>-->
+                <!--</a>-->
+                <!--<ul class="treeview-menu">-->
+                    <!--<li><a class="treeview-item" href="subdomain-brute"><i class="icon fa fa-pencil"></i>New Scan</a></li>-->
+                    <!--<li><a class="treeview-item" href="subdomain-list"><i class="icon fa fa-indent"></i>Result</a></li>-->
+                <!--</ul>-->
+            <!--</li>-->
+
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview">
+                    <i class="app-menu__icon fa fa-heartbeat"></i>
+                    <span class="app-menu__label">漏洞扫描</span>
+                    <i class="treeview-indicator fa fa-angle-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a class="treeview-item" href="vul-scanner"><i class="icon fa fa-pencil"></i>添加任务</a></li>
+                    <li><a class="treeview-item" href="vul-tasks"><i class="icon fa fa-gear"></i>任务管理</a></li>
+                </ul>
+            </li>
+
+            <!--<li>-->
+                <!--<a class="app-menu__item" href="port-scanner">-->
+                    <!--<i class="app-menu__icon fa fa-deviantart"></i>-->
+                    <!--<span class="app-menu__label">被动扫描</span>-->
+                    <!--<i class="treeview-indicator fa fa-angle-right"></i>-->
+                <!--</a>-->
+            <!--</li>-->
+
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview">
+                    <i class="app-menu__icon fa fa-gavel"></i>
+                    <span class="app-menu__label">认证检测</span>
+                    <i class="treeview-indicator fa fa-angle-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a class="treeview-item" href="new-auth-tester"><i class="icon fa fa-pencil"></i>添加扫描</a></li>
+                    <li><a class="treeview-item" href="auth-tester-tasks"><i class="icon fa fa-indent"></i>任务管理</a></li>
+                    <li><a class="treeview-item" href="week-passwd-list"><i class="icon fa fa-file-text"></i>弱口令详情</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a class="app-menu__item" href="#" data-toggle="treeview">
+                    <i class="app-menu__icon fa fa-cogs"></i>
+                    <span class="app-menu__label">系统设置</span>
+                    <i class="treeview-indicator fa fa-angle-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a class="treeview-item" href="advanced-option"><i class="icon fa fa-pencil"></i>高级选项</a></li>
+{#                    <li><a class="treeview-item" href="system-config"><i class="icon fa fa-gear"></i>System Config</a></li>#}
+                </ul>
+            </li>
+        </ul>
+    </aside>
+    {% block content %}
+
+    {% endblock %}
+
+
+    <script src="static/js/jquery/jquery-3.2.1.min.js"></script>
+    <script src="static/js/popper.min.js"></script>
+    <script src="static/js/bootstrap/bootstrap.min.js"></script>
+    <script src="static/js/main.js"></script>
+    <script src="static/js/plugins/pace.min.js"></script>
+{#    <script src="static/js/server/update.js"></script>#}
+    {% block js %}
+
+    {% endblock %}
+  </body>
+</html>

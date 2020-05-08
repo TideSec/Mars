@@ -1,0 +1,255 @@
+{% extends "base.html" %}
+{% block css %}
+    <link href="static/css/duallistbox/bootstrap-duallistbox.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i>&nbsp;Subdomain Brute</h1>
+            <p></p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item active"><a href="#">New Brute</a></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                        <div class="row"><div class="col-sm-12 col-md-6">
+                            <div class="dataTables_length" id="sampleTable_length">
+                                <a class="btn btn-primary" href="#" data-target="#newDomain" data-toggle="modal" title="Add Plugins">
+                                    <i class="fa fa-plus-square fa-lg"></i> New Domain</a>
+                                <br>
+                                <br>
+                            </div>
+                        </div>
+                        </div>
+
+                        <table class="table table-hover table-bordered" id="sampleTable">
+                            <thead>
+                            <tr class="text-center">
+                                <th>Name</th>
+                                <th>Domain</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Manage</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in domain_data %}
+                                <tr class="center">
+                                    <td>
+                                        <a href="subdomain-list?domain={{ i['_id'] }}">{{ i['domain_name'] }}</a>
+                                    </td>
+                                    <td title="{{ i['domain'] | join(',')}}">{{ i['domain'] | join(',') | truncate(15 , True)}}</td>
+                                    <td>{{ i['status'] }}</td>
+                                    <td>{{ i['date'] }}</td>
+                                    <td class="text-center">
+                                        <div class="hidden-sm hidden-xs action-buttons">
+                                            <a onclick="get_domain_host('{{ i['_id'] }}')" role="button" href="#" title="New Vul Scan" data-toggle="modal" data-target="#newScan">
+                                                <i class="fa fa-bug"></i>
+                                            </a>
+                                            &nbsp;
+                                            &nbsp;
+                                            <a onclick="get_domain_awvs('{{ i['_id'] }}')" role="button" href="#" title="Acunetix Scanner" data-toggle="modal" data-target="#newAWVS">
+                                                <i class="fa fa-heartbeat"></i>
+                                            </a>
+                                            &nbsp;
+                                            &nbsp;
+                                            <a role="button" href="?download={{ i['_id'] }}" title="Download" >
+                                                <i class="fa fa-download"></i>
+                                            </a>
+                                            &nbsp;
+                                            &nbsp;
+                                            <a id="test1" role="button" href="#" onclick="delete_domain('{{ i['_id'] }}')" title="Delete">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="modal" id="newDomain" >
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Add Domain</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    </div>
+                                    <div class="modal-body">
+
+                                        <form action="#" class="dropzone">
+                                            <div class="form-group">
+                                                <label class="control-label no-padding-right">Domain Name<span class="text-danger">*</span></label>
+                                                <div>
+                                                    <input type="text" class="form-control" id="domain_name" name="domain_name_val" placeholder="Task Name">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label no-padding-right">Domain<span class="text-danger">*</span></label>
+                                                <div>
+                                                    <textarea type="text" class="form-control" id="domain" name="domain_val" placeholder="Domain Name"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="toggle lg">
+                                                <label>Third-level Domain
+                                                    <input type="checkbox" checked><span class="button-indecator"></span>
+                                                </label>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                        <button class="btn btn-primary " id="new_domain" type="button">
+                                            <i class="fa fa-fw fa-lg fa-check-circle"></i>Submit
+                                        </button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                    </div>
+
+                    <div class="modal" id="newAWVS" >
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Acunetix Scanner</h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Task Name <span class="text-danger">*</span></label>
+                                            <div>
+                                                <input type="text" class="form-control" id="awvs_task_name" name="awvs_task_name" placeholder="">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Target <span class="text-danger">*</span></label>
+                                            <div>
+                                                <textarea class="form-control" id="awvs_target" name="awvs_target" rows="4" placeholder="One url per line:&#13;&#10;http://example.com&#13;&#10;http://example.com"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Scan Type <span class="text-danger">*</span></label>
+                                            <div >
+                                                <select class="form-control col-md-7" id="awvs_scan_type" title="Scan Type" name="awvs_scan_type">
+                                                    <option value="0">Full Scan</option>
+                                                    <option value="1">High Risk Vulnerabilities</option>
+                                                    <option value="2">Cross-site Scripting Vulnerabilities</option>
+                                                    <option value="3">SQL Injection Vulnerabilities</option>
+                                                    <option value="4">Weak Passwords</option>
+                                                    <option value="5">Crawl Only</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr hr-16 hr-dotted"></div>
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Description </label>
+                                            <div>
+                                                <input type="text" class="form-control" id="awvs_desc_val" name="awvs_desc_val" placeholder="">
+                                            </div>
+                                        </div>
+
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-hidden="true">Cancel
+                                    </button>
+                                    <button class="btn btn-primary" id="awvs-scan" type="button">
+                                        <span>OK</span>
+                                    </button>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal -->
+
+                    <div class="modal fade" id="newScan" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><!-- /scan-modal -->
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        New Scan
+                                    </h4>
+                                </div>
+                                <div class="modal-body" >
+                                    <form class="form-horizontal" role="form">
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Task Name <span class="text-danger">*</span></label>
+                                            <div>
+                                                <input type="text" class="form-control" id="task_name" name="taskname_val" placeholder="Task Name">
+                                            </div>
+                                        </div>
+
+                                        <div class="space-6"></div>
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Recursion</label>
+                                            <div>
+                                                <select class="form-control" id="form-field-plan" title="Recursion" name="recursion_val">
+                                                    <option value="0">Once</option>
+                                                    <option value="1">Every day</option>
+                                                    <option value="7">Every week</option>
+                                                    <option value="30">Every month</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Plugin Select <span class="text-danger">*</span></label>
+                                            <div>
+                                                <select multiple="multiple" size="6" name="plugin_list" title="Plugin Select">
+                                                    {% for a in plugin_data %}
+                                                        <option value="{{ a['_id'] }}">{{ a['plugin_name'] }}</option>
+                                                    {% endfor %}
+                                        </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr hr-16 hr-dotted"></div>
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Target <span class="text-danger">*</span></label>
+                                            <div>
+                                                <textarea class="form-control" rows="5" id="scan_target_list" title="Target" name="target_val" placeholder="Loading..."></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-hidden="true">Cancel
+                                            </button>
+                                            <button class="btn btn-primary " id="domain-scan" type="button">
+                                                <span>Submit</span> <i class="fa fa-send m-l-10"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal-end -->
+                </div>
+
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+{% block js %}
+    <!-- Data table plugin-->
+    <script type="text/javascript" src="static/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="static/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="static/js/jquery/jquery.bootstrap-duallistbox.js"></script>
+    <script src="static/js/server/subdomain-brute.js"></script>
+{% endblock %}

@@ -1,0 +1,1 @@
+{"info":{"name":"LDAP","regexp":["supplied argument is not a valid ldap","javax\\.naming\\.NameNotFoundException","javax\\.naming\\.directory\\.InvalidSearchFilterException","Invalid DN syntax","LDAPException*","Module Products\\.LDAPMultiPlugins","IPWorksASP\\.LDAP","Local error occurred","Object does not exist","An inappropriate matching occurred"]}}

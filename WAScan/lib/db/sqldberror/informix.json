@@ -1,0 +1,1 @@
+{"db":{"name":"Informix","regexp":["Exception.*Informix","Informix ODBC Driver","com\\.informix\\.jdbc","weblogic\\.jdbc\\.informix"]}}

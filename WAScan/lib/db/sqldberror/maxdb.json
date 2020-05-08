@@ -1,0 +1,1 @@
+{"db":{"name":"SAP MaxDB","regexp":["SQL error.*POS([0-9]+).*","Warning.*maxdb.*"]}}

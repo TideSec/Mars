@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% block css %}
+{% endblock %}
+{% block content %}
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i>&nbsp;漏洞扫描</h1>
+            <p>Web应用漏洞扫描</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item active"><a href="#">漏洞扫描</a></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                        <table class="table table-hover table-bordered" id="sampleTable">
+                            <thead>
+                            <tr class="text-center">
+                                <th>目标地址</th>
+                                <th>扫描类型</th>
+                                <th>扫描状态</th>
+                                <th>漏洞数量</th>
+                                <th>任务备注</th>
+                                <th>扫描日期</th>
+                                <th>任务管理</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in tasks_info %}
+                                <tr class="text-center">
+                                    <td>
+                                        <a href="{{ i['address'] }}" target="view_window">{{ i['address'] }}</a>
+                                    </td>
+                                    <td>{{ i['profile_name'] }}</td>
+
+                                    {% if i['status'] == 'completed' %}
+                                        <td>已完成</td>
+                                    {% elif i['status'] == 'processing' %}
+                                        <td>扫描中</td>
+                                    {% else %}
+                                        <td>队列中</td>
+                                    {% endif %}
+
+                                    <td class="text-center">
+                                        <span class="badge badge-danger">{{ i['vul_high'] }}</span>
+                                        &nbsp;
+                                        <span class="badge badge-warning">{{ i['vul_medium'] }}</span>
+                                        &nbsp;
+                                        <span class="badge badge-info">{{ i['vul_low'] }}</span>
+                                        &nbsp;
+                                        <span class="badge badge-success">{{ i['vul_info'] }}</span>
+                                    </td>
+                                    <td>{{ i['desc'] }}</td>
+                                    <td>{{ i['start_date'] }}</td>
+                                    <td class="text-center">
+                                        <div class="hidden-sm hidden-xs action-buttons">
+                                            <a onclick="report_url('{{ i['scan_id'] }}')"  role="button" data-target="#downloadReport" data-toggle="modal" href="#" title="Download Report">
+                                                <i class="fa fa-download"></i>
+                                            </a>
+                                            &nbsp;
+                                            &nbsp;
+                                            <a role="button" href="#" onclick="delete_scan('{{ i['scan_id'] }}')" title="Delete">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="modal" id="downloadReport" >
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Download Report</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <form class="form-group row">
+                                            <div class="col-md-2"></div>
+                                            <div class="col-md-4" id="report_download_html">
+                                                <p>Generating...</p>
+                                            </div>
+                                            <div class="col-md-4" id="report_download_pdf">
+                                                {# <p>Please wait...</p>#}
+                                            </div>
+                                            <div class="col-md-2"></div>
+                                        </form>
+
+                                        <div class="modal-footer">
+                                            <p class="text-muted">如果页面返回"Not Found(404)", 请在几分钟后重试下载。</p>
+                                            <button class="btn default " type="button" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+{% block js %}
+    <!-- Data table plugin-->
+    <script type="text/javascript" src="static/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="static/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="static/js/server/vul-scanner.js"></script>
+{% endblock %}

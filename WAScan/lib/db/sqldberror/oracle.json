@@ -1,0 +1,1 @@
+{"db":{"name":"Oracle","regexp":["\bORA-\\d{5}","Oracle error","Oracle.*Driver","Warning.*\\Woci_.*","Warning.*\\Wora_.*","oracle\\.jdbc\\.driver","quoted string not properly terminated"]}}

@@ -1,0 +1,1 @@
+{"db":{"name":"MySQL","regexp":["SQL syntax.*MySQL","Warning.*mysql_.*","MySqlException \\(0x","valid MySQL result","check the manual that corresponds to your (MySQL|MariaDB) server version","MySqlClient\\.","com\\.mysql\\.jdbcd\\.exceptions"]}}

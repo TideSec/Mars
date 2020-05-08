@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+{% block css %}
+    <link href="static/css/duallistbox/bootstrap-duallistbox.css" rel="stylesheet">
+
+{% endblock %}
+{% block content %}
+
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-edit"></i> 添加客户</h1>
+            <p>新建客户分组</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item">Forms</li>
+            <li class="breadcrumb-item"><a href="#">添加客户</a></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="row">
+                    <div class="col-lg-2">
+                    </div>
+                    <div class="col-lg-8">
+                        <form class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">客户名称<span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="cus_name" type="text" size="7">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">联系人<span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="cus_contact" type="text" size="7">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">手机<span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="cus_phone" type="text" size="7">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">邮箱</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="cus_email" type="text" size="7">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">服务期限<span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+
+                                    <div class="form-inline">
+                                    <input class="form-control" style="width: 30%" name="cus_zhouqi_start" type="date" size="3">&nbsp;&nbsp;至&nbsp;&nbsp;<input class="form-control" style="width: 30%" name="cus_zhouqi_end" type="date" size="3">
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="form-group row">
+                                    <label class="control-label col-md-3">服务类型 </label>
+                                <div class="col-md-9">
+                                    <select class="form-control col-md-6" name="cus_serv_type" title="Recursion">
+                                        <option value="1">威胁预警</option>
+                                        <option value="2">威胁预警+敏感字检测</option>
+                                        <option value="3">威胁预警+定期扫描</option>
+                                        <option value="4">漏洞预警+定期扫描+敏感字检测</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">备注</label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="cus_other" type="text" size="7">
+                                </div>
+                            </div>
+
+
+                        <button class="btn btn-primary" id="showConfig" type="button"><i class="fa fa-fw fa-lg fa-check-circle"></i>添加</button>
+                        </form>
+
+                    </div>
+                    <div class="col-md-2">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% block js %}
+    <script src="static/js/jquery/jquery.bootstrap-duallistbox.js"></script>
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script src="static/js/server/new-customer.js"></script>
+{% endblock %}
+{% endblock %}

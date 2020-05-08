@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block css %}
+{% endblock %}
+{% block content %}
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i>&nbsp;任务管理</h1>
+            <p></p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item active"><a href="#">任务管理</a></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <table class="table table-hover table-bordered" id="sampleTable">
+                        <thead>
+                        <tr class="text-center">
+                            <th>任务名称</th>
+                            <th>服务</th>
+                            <th>扫描周期</th>
+                            <th>状态</th>
+                            <th>威胁统计</th>
+                            <th>检测日期</th>
+                            <th>管理</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in auth_tasks %}
+                            <tr class="text-center">
+                                <td>
+                                    <a href="week-passwd-list?task={{ i['_id'] }}">{{ i['task_name'] }}</a>
+                                </td>
+                                <td title="{{ i['service'] | join(',') | upper}}">{{ i['service'] | join(',') | truncate(15 , True) | upper}}</td>
+                                {% if i['recursion'] == 0 %}
+                                    <td>一次</td>
+                                {% elif i['recursion'] == 1 %}
+                                    <td>每天</td>
+                                {% elif i['recursion'] == 7 %}
+                                    <td>每周</td>
+                                {% elif i['recursion'] == 30 %}
+                                    <td>每月</td>
+                                {% endif %}
+                                <td>{{ i['status'] }}</td>
+                                <td><span class="badge badge-primary">{{ i['week_count'] }}</span></td>
+                                <td>{{ i['date'] }}</td>
+                                <td class="text-center">
+                                    <a onclick="get_target_host('{{ i['_id'] }}')" role="button" href="#" title="Target Info" data-toggle="modal" data-target="#targetInfo">
+                                        <i class="fa fa-align-justify"></i>
+                                    </a>
+                                    &nbsp;
+                                    &nbsp;
+                                    &nbsp;
+                                    <a onclick="rescan_task('{{ i['_id'] }}')" role="button" href="#" title="Rescan">
+                                        <i class="fa fa-refresh"></i>
+                                    </a>
+                                    &nbsp;
+                                    &nbsp;
+                                    <a onclick="delete_task('{{ i['_id'] }}')"  role="button" href="#" title="Delete">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="modal fade" id="targetInfo" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><!-- /edit-modal -->
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        目标信息
+                                    </h4>
+                                </div>
+                                <div class="modal-body" >
+                                    <form class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <pre class="form-control" id="target_info_data">Loading...</pre>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-hidden="true">
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal-end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+{% block js %}
+    <!-- Data table plugin-->
+    <script type="text/javascript" src="static/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="static/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script src="static/js/server/auth-tester-tasks.js"></script>
+{% endblock %}

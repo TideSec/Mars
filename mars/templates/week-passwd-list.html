@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% block css %}
+    <link href="static/css/duallistbox/bootstrap-duallistbox.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i>&nbsp;弱口令列表</h1>
+            <p></p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item active"><a href="week-passwd-list">弱口令列表</a></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <table class="table table-hover table-bordered" id="sampleTable">
+                        <thead>
+                        <tr class="text-center">
+                            <th>任务名称</th>
+                            <th>目标</th>
+                            <th>服务</th>
+                            <th>用户名</th>
+                            <th>密码</th>
+                            <th>扫描时间</th>
+                            <th>管理</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in weekpasswd_data %}
+                            <tr class="text-center">
+                                <td>{{ i['task_name'] }}</td>
+                                <td>{{ i['target'] }}</td>
+                                <td>{{ i['service'] | upper}}</td>
+                                <td>{{ i['username'] }}</td>
+                                <td>{{ i['password'] }}</td>
+                                <td>{{ i['date'] }}</td>
+                                <td class="text-center">
+                                    <a onclick="delete_result('{{ i['_id'] }}')"  role="button" href="#" title="Delete">
+                                        <i class="ace-icon fa fa-trash-o bigger-130"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+{% block js %}
+    <!-- Data table plugin-->
+    <script type="text/javascript" src="static/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="static/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="static/js/jquery/jquery.bootstrap-duallistbox.js"></script>
+
+    <script src="static/js/server/week-passwd-list.js"></script>
+{% endblock %}

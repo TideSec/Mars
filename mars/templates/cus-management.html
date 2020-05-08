@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% block css %}
+
+{% endblock %}
+{% block content %}
+
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i>&nbsp;客户管理</h1>
+            <p></p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item active"><a href="#">客户列表</a></li>
+        </ul>
+    </div>
+
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-6">
+                                <div class="dataTables_length" id="sampleTable_length">
+                                    <a class="btn btn-primary" href="new-customer" role="button" title="新建客户" >
+                                        <i class="fa fa-gitlab fa-lg"></i> 新建客户</a>
+                                    <br>
+                                    <br>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <table class="table table-hover table-bordered" id="sampleTable">
+                        <thead>
+                        <tr class="text-center">
+                            <th>序号</th>
+                            <th>客户名称</th>
+                            <th>资产总数</th>
+                            <th>联系人</th>
+                            <th>手机</th>
+                            <th>服务期限</th>
+                            <th>服务类型</th>
+                            <th>备注</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in cus_data %}
+                            <tr  class="text-center">
+
+                                <td>{{ loop.index }}</td>
+                                <td>
+                                    <a href="asset-management?cus={{ i['_id'] }}">{{ i['cus_name'] }}</a>
+                                </td>
+
+                                <td>
+                                    <a href="asset-services?cus={{ i['_id'] }}">{{ i['cus_server_num'] }}</a>
+                                </td>
+
+                                <td>{{ i['cus_contact'] }}</td>
+                                <td>{{ i['cus_phone'] }}</td>
+
+                                <td>{{ i['cus_zhouqi_start'] }} —— {{ i['cus_zhouqi_end'] }}</td>
+
+                                {% if i['cus_serv_type'] == '1' %}
+                                    <td>预警</td>
+                                {% elif i['cus_serv_type'] == '2' %}
+                                    <td>预警+敏检</td>
+                                {% elif i['cus_serv_type'] == '3' %}
+                                    <td>预警+定扫</td>
+                                {% elif i['cus_serv_type'] == '4' %}
+                                    <td>预警+定扫+敏检</td>
+                                {% endif %}
+
+
+
+                                <td>{{ i['cus_other'] }}</td>
+                                <td class="text-center">
+                                    <a onclick="rescan_asset('{{ i['_id'] }}')" role="button" href="#" title="Rescan Asset">
+                                        <i class="fa fa-refresh"></i>&nbsp;&nbsp;
+                                    </a>
+                                    &nbsp;
+                                    <a onclick="cus_edit_id('{{ i['_id'] }}')"  role="button" data-toggle="modal" href="#" title="Edit" data-target="#editCus">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    &nbsp;
+                                    <a onclick="cus_delete('{{ i['_id'] }}')"  role="button" href="#" title="Delete">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="modal fade" id="editCus" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        编辑客户
+                                    </h4>
+                                </div>
+                                <div class="modal-body" >
+                                    <form class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">客户名称</label>
+                                            <div>
+                                                <input type="text" class="form-control" id="cus_name" name="cus_name" placeholder="客户名称">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">客户 ID</label>
+                                            <div>
+                                                <input type="text" class="form-control" id="cus_id" name="cus_id" disabled="disabled" title="客户 ID">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">联系人</label>
+                                            <div>
+                                                <input type="text" class="form-control" id="cus_contact" name="cus_contact" title="联系人">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">手机</label>
+                                            <div>
+                                                <input type="text" class="form-control" id="cus_phone" name="cus_phone" title="手机">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">邮箱</label>
+                                            <div>
+                                                <input type="text" class="form-control" id="cus_email" name="cus_email"  title="邮箱">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">服务期限</label>
+
+                                            <div>
+                                                <div class="form-inline">
+                                                    <input class="form-control" style="width: 40%" id="cus_zhouqi_start" name="cus_zhouqi_start" type="date" size="3">&nbsp;&nbsp;至&nbsp;&nbsp;<input class="form-control" style="width: 40%" id="cus_zhouqi_end" name="cus_zhouqi_end" type="date" size="3">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="space-6"></div>
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">服务类型</label>
+                                            <div>
+                                                <select class="form-control col-md-6" id="cus_serv_type" name="cus_serv_type" title="服务类型">
+                                                    <option value="1">威胁预警</option>
+                                                    <option value="2">威胁预警+敏感字检测</option>
+                                                    <option value="3">威胁预警+定期扫描</option>
+                                                    <option value="4">漏洞预警+定期扫描+敏感字检测</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">备注</label>
+                                            <div>
+                                                <input type="text" class="form-control" id="cus_other" name="cus_other" title="备注">
+                                            </div>
+                                        </div>
+
+                                        <div class="hr hr-16 hr-dotted"></div>
+
+                                        <!--<div class="form-group">-->
+                                            <!--<label class="control-label no-padding-right">Target</label>-->
+                                            <!--<div>-->
+                                                <!--<textarea class="form-control" rows="5" id="scan_target_list" title="Target" name="target_val"></textarea>-->
+                                            <!--</div>-->
+                                        <!--</div>-->
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-hidden="true">Cancel
+                                            </button>
+                                            <button class="btn btn-primary cus-update" type="button">
+                                                <span>更新</span> <i class="fa fa-send m-l-10"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+{% block js %}
+    <!-- Data table plugin-->
+    <script type="text/javascript" src="static/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="static/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="static/js/server/cus-management.js"></script>
+{% endblock %}

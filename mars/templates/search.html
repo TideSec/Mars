@@ -1,0 +1,207 @@
+{% extends "base.html" %}
+{% block css %}
+    <link href="static/css/duallistbox/bootstrap-duallistbox.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i>&nbsp;Service Search</h1>
+            <p></p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item active"><a href="#">Search</a></li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div>
+                    <a class="btn btn-primary btn_select" href="#" id="btn_select" rel="select_all">Select All</a>&nbsp;&nbsp;
+                    <a class="btn btn-primary" href="#" id="new_scan" role="button" onclick="newServiceScan()" title="New Scan" data-toggle="modal" data-target="#newScan"><i class="fa fa-gitlab fa-lg"></i>New Scan</a>
+                    <a class="btn btn-primary" href="#" role="button" onclick="newAuthTester()" title="New Auth Tester" data-toggle="modal" data-target="#newAuthtest"><i class="fa fa-gitlab fa-lg"></i>New Auth Tester</a>
+                </div>
+                <div class="modal fade" id="newScan" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><!-- /scan-modal -->
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel">
+                                    New Scan
+                                </h4>
+                            </div>
+                            <div class="modal-body" >
+                                <form class="form-horizontal" role="form">
+
+                                    <div class="form-group">
+                                        <label class="control-label no-padding-right">Task Name <span class="text-danger">*</span></label>
+                                        <div>
+                                            <input type="text" class="form-control" id="task_name" name="taskname_val" placeholder="Task Name">
+                                        </div>
+                                    </div>
+
+                                    <div class="space-6"></div>
+                                    <div class="form-group">
+                                        <label class="control-label no-padding-right">Recursion</label>
+                                        <div>
+                                            <select class="form-control" id="form-field-plan" title="Recursion" name="recursion_val">
+                                                <option value="0">Once</option>
+                                                <option value="1">Every day</option>
+                                                <option value="7">Every week</option>
+                                                <option value="30">Every month</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label no-padding-right">Plugin Select <span class="text-danger">*</span></label>
+                                        <div>
+                                            <select multiple="multiple" size="6" name="plugin_list" title="Plugin Select">
+                                                {% for a in plugin_info %}
+                                                    <option value="{{ a['_id'] }}">{{ a['plugin_name'] }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr hr-16 hr-dotted"></div>
+                                    <div class="form-group">
+                                        <label class="control-label no-padding-right">Target <span class="text-danger">*</span></label>
+                                        <div>
+                                            <textarea class="form-control" rows="5" id="scan_target_list" title="Target" name="target_val" placeholder="Loading..."></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                        <button class="btn btn-primary " id="server-scan" type="button">
+                                            <span>Submit</span> <i class="fa fa-send m-l-10"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal-end -->
+                <div class="modal fade" id="newAuthtest" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><!-- /scan-modal -->
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title" id="myModalLabel">
+                                    New Auth Tester
+                                </h4>
+                            </div>
+                            <div class="modal-body" >
+                                <form class="form-horizontal" role="form">
+
+                                    <div class="form-group">
+                                        <label class="control-label no-padding-right">Task Name <span class="text-danger">*</span></label>
+                                        <div>
+                                            <input type="text" class="form-control" name="auth_task_name" placeholder="Task Name">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label no-padding-right">Recursion</label>
+                                        <div>
+                                            <select class="form-control" id="form-field-plan" title="Recursion" name="auth_recursion">
+                                                <option value="0">Once</option>
+                                                <option value="1">Every day</option>
+                                                <option value="7">Every week</option>
+                                                <option value="30">Every month</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label class="control-label no-padding-right">Args</label>
+                                        <div>
+                                            <input class="form-control" name="auth_args" title="Args" placeholder=""/>
+                                        </div>
+                                    </div>
+
+                                    <div class="space-6"></div>
+                                    <div class="form-group">
+                                        <label class="control-label no-padding-right">Protocols Select <span class="text-danger">*</span></label>
+                                        <div>
+                                            <select multiple="multiple" size="6" name="auth_service_list" title="Plugin Select">
+                                                {% for a in protocols %}
+                                                    <option value="{{ a }}">{{ a | upper }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="hr hr-16 hr-dotted"></div>
+                                    <div class="form-group">
+                                        <label class="control-label no-padding-right">Target <span class="text-danger">*</span></label>
+                                        <div>
+                                            <textarea class="form-control" rows="5" id="auth_target_list" title="Target" name="auth_target_list" placeholder="Loading..."></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label class="control-label no-padding-right">Username<span class="text-danger">*</span></label>
+                                            <div>
+                                                <textarea class="form-control" placeholder="One username per line" rows="6" name="auth_username_list">{{ username_list }}</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="control-label no-padding-right">Password<span class="text-danger">*</span></label>
+                                            <div>
+                                                <textarea class="form-control" placeholder="One password per line" rows="6" name="auth_password_list">{{ password_list }}</textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                        <button class="btn btn-primary " id="asset-auth-tasks" type="button">
+                                            <span>Submit</span> <i class="fa fa-send m-l-10"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div><!-- /.modal-content -->
+                    </div><!-- /.modal-dialog -->
+                </div><!-- /.modal-end -->
+
+            </div>
+            <div class="row">
+                <div class="col-lg-12">
+                <div class="list-group">
+                    <a class="list-group-item list-group-item-action">
+                        <h4 class="list-group-item-heading">
+                            {{ data }}
+                        </h4>
+                    </a>
+                </div>
+                    {% for i in search_result %}
+                        <div class="list-group">
+                            <a class="list-group-item list-group-item-action">
+                                <h4 class="list-group-item-heading">
+                                    <input title="checkbox" type="checkbox" name='select_id' value="{{ i['host'] }}:{{ i['port'] }}" />
+                                    &nbsp;&nbsp;&nbsp;&nbsp;Host:&nbsp;&nbsp;{{ i['host'] }}&nbsp;&nbsp;&nbsp;&nbsp;Port:&nbsp;&nbsp;{{ i['port'] }}&nbsp;&nbsp;&nbsp;&nbsp;Product:&nbsp;&nbsp;{{ i['product'] }}&nbsp;&nbsp;&nbsp;&nbsp;Version:&nbsp;&nbsp;{{ i['version'] }}
+                                </h4>
+                                <br>
+                                <pre style="font-size:15px;white-space: pre-wrap;word-wrap: break-word;">{{ i['cpe'] }}&#13;&#10;{{ i['extrainfo'] }}&#13;&#10;{{ i['script'] }}&#13;&#10;{{ i['asset_name'] }}&#13;&#10;{{ i['date'] }}</pre>
+                            </a>
+                        </div>
+                        <br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+{% endblock %}
+{% block js %}
+    <!-- Data table plugin-->
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="static/js/jquery/jquery.bootstrap-duallistbox.js"></script>
+    <script src="static/js/server/search.js"></script>
+
+{% endblock %}

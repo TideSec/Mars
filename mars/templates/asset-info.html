@@ -1,0 +1,448 @@
+{% extends "base.html" %}
+{% block css %}
+    <link href="static/css/duallistbox/bootstrap-duallistbox.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<main class="app-content">
+  <div class="app-title">
+    <div>
+      <h1><i class="fa fa-th-list"></i>&nbsp;资产详情</h1>
+      <p></p>
+    </div>
+    <ul class="app-breadcrumb breadcrumb side">
+      <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+      <li class="breadcrumb-item">首页</li>
+      <li class="breadcrumb-item active"><a href="#">资产详情</a></li>
+    </ul>
+  </div>
+
+            {% for i in server_data %}
+
+              <div class="row">
+                  <div class="col-lg-12">
+                    <div class="bs-component">
+                      <div class="panel panel-primary">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">站点信息</h3>
+                        </div>
+                        <div class="panel-body">
+                            <h2 class="page-header"><i class="fa fa-globe"></i> <a href="{{ i['target'] }}" target="_blank"> {{ i['target'] }}</a></h2><p></p>
+
+                            <div class="row invoice-info">
+                                <div class="col-10">
+                                    <div style="font-size:1rem">
+
+                                        <b><span class="btn btn-info">标题：</span></b>
+
+                                        {% if i['title'] !='' %}
+                                            <span class="btn btn-warning">{{ i['title'] }}</span>
+                                        {% endif %}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                        <b><span class="btn btn-info">状态：</span></b>
+
+                                        {% if i['state'] !='' %}
+                                            <span class="btn btn-warning">{{ i['state'] }}</span>
+                                        {% endif %}
+
+                                        {% if i.cdn %}
+                                            {% if i['cdn'] !='' %}
+                                        <br><br>
+                                                    <b><span class="btn btn-info">CDN信息：</span></b>
+                                                    {% if i['cdn'] !='' %}<span class="btn btn-warning">{{ i['cdn'] }}</span>{% endif %}
+                                                    {% if i['cdn_cname'] !='' %}<span class="btn btn-outline-success">{{ i['cdn_cname'] }}</span>{% endif %}
+                                            {% endif %}
+                                        {% endif %}
+
+                                    <br><br>
+                                        <b><span class="btn btn-info">Banner信息：</span></b>
+                                        {% if i['os'] !='' %}<span class="btn btn-outline-danger">{{ i['os'] }}</span>{% endif %}
+                                        {% if i['httpserver'] !='' %}<span class="btn btn-outline-danger">{{ i['httpserver'] }}</span>{% endif %}
+                                        {% if i['cms'] !='' %}<span class="btn btn-outline-danger">{{ i['cms'] }}</span>{% endif %}
+                                        {% if i['waf'] !='' %}<span class="btn btn-outline-danger">{{ i['waf'] }}</span>{% endif %}
+                                        {% if i['xpb'] !='' %}<span class="btn btn-outline-danger">{{ i['xpb'] }}</span>{% endif %}
+                                        {% if i['banner'] !='' %}<span class="btn btn-outline-danger">{{ i['banner'] }}</span>{% endif %}
+                                        <br>
+
+
+                                    {% if i.extrabanner %}
+                                        {% if i['extrabanner'] !=''  %}
+                                        <br>
+                                        {% set info = i['extrabanner'].split('***') %}
+                                            {% for info_tmp in info %}
+                                        <b><span class="btn btn-info">ExtraBanner：</span></b>
+                                        <span class="btn btn-outline-danger">{{ info_tmp }}</span><br><br>
+                                            {% endfor %}
+                                        {% endif %}
+                                    {% endif %}
+
+
+                                    <br>
+                                    {% if i.ip_info %}
+                                        {% if i['ip_info'] !=''  %}
+                                            <b>IP地址：</b> {{ i['ip'] }}
+                                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>IP信息：</b>{{ i['ip_info'][0]['area'] }} {{i['ip_info'][0]['isp'] }}   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>GPS信息：</b><a href="http://www.gpsspg.com/maps.htm?s={{ i['ip_info'][0]['gps'] }}" target="_blank">{{ i['ip_info'][0]['gps'] }}</a> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>扫描次数：</b>{{ i['scan_times']}}次
+                                            <br><br>
+                                        {% endif %}
+                                    {% endif %}
+
+                                    <b>所属客户：</b>{{ i['asset_cus_name'] }}  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>所属资产：</b>{{ i['asset_name'] }} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>站点Hash：</b>{{ i['hash'] }}
+                                    <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      </div>
+
+                      <div class="panel panel-success">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">端口信息 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:normal;"> 扫描时间: {{ i['updatetime'] }}</span></h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="clearfix"></div>
+                              <div class="col-md-12">
+                                  <table class="table table-bordered">
+                                    <thead>
+                                      <tr class="text-center">
+                                        <th style="width: 10%">主机</th>
+                                        <th style="width: 5%">端口</th>
+                                        <th style="width: 10%">服务</th>
+                                         <th style="width: 14%">应用</th>
+                                        <th style="width: 8%">版本</th>
+                                          <th style="width: 15%">Title</th>
+                                          <th style="width: 13%">Header</th>
+                                          <th style="width: 10%">CPE</th>
+                                          <th style="width: 10%">其它</th>
+                                          <th style="width: 5%">指纹</th>
+
+                                      </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                    {% for x in i['port_info'] %}
+                                        <tr >
+
+                                            <td class="text-center">{{ x['host'] }}</td>
+                                            <td class="text-center"><a href="http://{{ x['host'] }}:{{ x['port'] }}" target="_blank">{{ x['port'] }}</a></td>
+                                            <td class="text-center">{{ x['name'] }}</td>
+                                            <td class="text-center">{{ x['product'] }}</td>
+                                            <td class="text-center">{{ x['version'] | truncate(15, True)  }}</td>
+                                            <td class="text-center"><a onclick="server_info('{{ i['_id'] }}_{{ x['port']  }}')" role="button" data-target="#serverInfo" data-toggle="modal" href="#" title="Server Info">{{ x['script']['http-title'] | truncate(30, True)}}</a></td>
+                                            <td class="text-center">{{ x['script']['http-server-header'] | truncate(30, True)}}</td>
+
+                                            <td class="text-center">{{ x['cpe'] | truncate(30, True) }}</td>
+                                            <td class="text-center"><a onclick="server_info('{{ i['_id'] }}_{{ x['port']  }}')" role="button" data-target="#serverInfo" data-toggle="modal" href="#" title="Server Info">{{ x['extrainfo'] }}</a></td>
+                                            <td class="text-center">
+                                                     <div class="hidden-sm hidden-xs action-buttons">
+                                                        <a onclick="server_info('{{ i['_id'] }}_{{ x['port']  }}')" role="button" data-target="#serverInfo" data-toggle="modal" href="#" title="Server Info">
+                                                            <i class="fa fa-pagelines"></i>
+                                                        </a>
+                                                         &nbsp;
+                                                        &nbsp;
+                                                        &nbsp;
+                                                        <a  href="asset-services?delete=xx" title="Delete">
+                                                            <i class="fa fa-trash-o"></i>
+                                                        </a>
+
+                                                    </div>
+                                                </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                  </table>
+                                </div>
+
+                        </div>
+                      </div>
+                    </div>
+
+                      <div class="panel panel-warning">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">信息变更</h3>
+                        </div>
+                        <div class="panel-body">
+                            <div class="clearfix"></div>
+                              <div class="col-md-12">
+    <!----------------------------------------------ip及标题变更信息展示开始---------------------------------------------------------->
+                            {% if i.ip_changed %}
+                                  <br>
+                                  <div style="text-align: center"><b><span class="btn btn-warning">IP解析变更记录</span></b></div>
+                                  <br>
+                                  <table class="table table-bordered">
+                                    <thead>
+                                      <tr class="text-center">
+                                        <th style="width: 15%">主机</th>
+                                        <th style="width: 10%">当前IP</th>
+                                        <th style="width: 10%">历史IP</th>
+                                        <th style="width: 20%">站点标题</th>
+                                        <th style="width: 20%">端口信息</th>
+                                        <th style="width: 10%">变更时间</th>
+                                      </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                    {% for x in i['ip_changed'] %}
+                                     {% set info = x.split('||') %}
+                                        <tr >
+                                            <td class="text-center">{{ i['target'] }}</td>
+                                            <td class="text-center">{{ i['ip'] }}</td>
+                                            <td class="text-center">{{ info[0] }}</td>
+                                            <td class="text-center">{{ info[1] }}</td>
+                                            <td class="text-center">{{ info[2] }}</td>
+                                            <td class="text-center">{{ info[3] }}</td>
+
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                  </table>
+                                  {% endif%}
+
+                                  {% if i.title_changed %}
+                                  <div style="text-align: center"><b><span class="btn btn-warning">站点标题变更记录</span></b></div>
+                                  <br>
+                                  <table class="table table-bordered">
+                                    <thead>
+                                      <tr class="text-center">
+                                        <th style="width: 15%">主机</th>
+                                        <th style="width: 10%">IP地址</th>
+                                        <th style="width: 20%">当前标题</th>
+                                        <th style="width: 20%">历史标题</th>
+                                        <th style="width: 20%">端口信息</th>
+                                        <th style="width: 10%">变更时间</th>
+                                      </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                    {% for x in i['title_changed'] %}
+                                         {% set info = x.split('||') %}
+                                        <tr >
+                                            <td class="text-center">{{ i['target'] }}</td>
+                                            <td class="text-center">{{ info[0] }}</td>
+                                            <td class="text-center">{{ i['title'] }}</td>
+                                            <td class="text-center">{{ info[1] }}</td>
+
+                                            <td class="text-center">{{ info[2] }}</td>
+                                            <td class="text-center">{{ info[3] }}</td>
+
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                  </table>
+                                  {% endif%}
+
+    <!----------------------------------------------ip及标题变更信息展示结束---------------------------------------------------------->
+
+    <!----------------------------------------------port_info_2信息展示开始---------------------------------------------------------->
+                              {% if i.port_info_2 %}
+                                  <div style="text-align: center"><b><span class="btn btn-warning">端口变更记录Ⅱ：{{ i['port_info_2'][0]['updatetime'] }}</span></b></div>
+                                  <br>
+                                  <table class="table table-bordered">
+                                    <thead>
+                                      <tr class="text-center">
+                                        <th style="width: 10%">主机</th>
+                                        <th style="width: 5%">端口</th>
+                                        <th style="width: 10%">服务</th>
+                                         <th style="width: 14%">应用</th>
+                                        <th style="width: 8%">版本</th>
+                                          <th style="width: 15%">Title</th>
+                                          <th style="width: 13%">Header</th>
+                                          <th style="width: 10%">CPE</th>
+                                          <th style="width: 10%">其它</th>
+                                          <th style="width: 5%">指纹</th>
+                                      </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                    {% for x in i['port_info_2'] %}
+                                        <tr >
+
+                                            <td class="text-center">{{ x['host'] }}</td>
+                                            <td class="text-center"><a href="http://{{ x['host'] }}:{{ x['port'] }}" target="_blank">{{ x['port'] }}</a></td>
+                                            <td class="text-center">{{ x['name'] }}</td>
+                                            <td class="text-center">{{ x['product'] }}</td>
+                                            <td class="text-center">{{ x['version'] | truncate(15, True)  }}</td>
+                                            <td class="text-center"><a onclick="server_info('{{ i['_id'] }}_{{ x['port']  }}')" role="button" data-target="#serverInfo" data-toggle="modal" href="#" title="Server Info">{{ x['script']['http-title'] | truncate(30, True)}}</a></td>
+                                            <td class="text-center">{{ x['script']['http-server-header'] | truncate(30, True)}}</td>
+
+                                            <td class="text-center">{{ x['cpe'] | truncate(30, True) }}</td>
+                                            <td class="text-center"><a onclick="server_info('{{ i['_id'] }}_{{ x['port']  }}')" role="button" data-target="#serverInfo" data-toggle="modal" href="#" title="Server Info">{{ x['extrainfo'] }}</a></td>
+                                            <td class="text-center">
+                                                     <div class="hidden-sm hidden-xs action-buttons">
+                                                        <a onclick="server_info('{{ i['_id'] }}_{{ x['port']  }}')" role="button" data-target="#serverInfo" data-toggle="modal" href="#" title="Server Info">
+                                                            <i class="fa fa-pagelines"></i>
+                                                        </a>
+                                                         &nbsp;
+                                                        &nbsp;
+                                                        &nbsp;
+                                                        <a  href="asset-services?delete=xx" title="Delete">
+                                                            <i class="fa fa-trash-o"></i>
+                                                        </a>
+
+                                                    </div>
+                                                </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                  </table>
+                                  {% endif%}
+
+     <!----------------------------------------------port_info_2信息展示结束---------------------------------------------------------->
+
+     <!----------------------------------------------port_info_3信息展示开始---------------------------------------------------------->
+
+                                  {% if i.port_info_3 %}
+                                  <div style="text-align: center"> <b><span class="btn btn-warning">端口变更记录Ⅲ：{{ i['port_info_3'][0]['updatetime'] }}</span></b></div>
+                                  <br>
+                                  <table class="table table-bordered">
+                                    <thead>
+                                      <tr class="text-center">
+                                        <th style="width: 10%">主机</th>
+                                        <th style="width: 5%">端口</th>
+                                        <th style="width: 10%">服务</th>
+                                         <th style="width: 14%">应用</th>
+                                        <th style="width: 8%">版本</th>
+                                          <th style="width: 15%">Title</th>
+                                          <th style="width: 13%">Header</th>
+                                          <th style="width: 10%">CPE</th>
+                                          <th style="width: 10%">其它</th>
+                                          <th style="width: 5%">指纹</th>
+
+                                      </tr>
+                                    </thead>
+
+                                    <tbody>
+
+                                    {% for x in i['port_info_3'] %}
+                                        <tr >
+
+                                            <td class="text-center">{{ x['host'] }}</td>
+                                            <td class="text-center"><a href="http://{{ x['host'] }}:{{ x['port'] }}" target="_blank">{{ x['port'] }}</a></td>
+                                            <td class="text-center">{{ x['name'] }}</td>
+                                            <td class="text-center">{{ x['product'] }}</td>
+                                            <td class="text-center">{{ x['version']  | truncate(15, True)  }}</td>
+                                            <td class="text-center"><a onclick="server_info('{{ i['_id'] }}_{{ x['port']  }}')" role="button" data-target="#serverInfo" data-toggle="modal" href="#" title="Server Info">{{ x['script']['http-title'] | truncate(30, True)}}</a></td>
+                                            <td class="text-center">{{ x['script']['http-server-header'] | truncate(30, True)}}</td>
+
+                                            <td class="text-center">{{ x['cpe'] | truncate(30, True) }}</td>
+                                            <td class="text-center"><a onclick="server_info('{{ i['_id'] }}_{{ x['port']  }}')" role="button" data-target="#serverInfo" data-toggle="modal" href="#" title="Server Info">{{ x['extrainfo'] }}</a></td>
+                                            <td class="text-center">
+                                                     <div class="hidden-sm hidden-xs action-buttons">
+                                                        <a onclick="server_info('{{ i['_id'] }}_{{ x['port']  }}')" role="button" data-target="#serverInfo" data-toggle="modal" href="#" title="Server Info">
+                                                            <i class="fa fa-pagelines"></i>
+                                                        </a>
+                                                         &nbsp;
+                                                        &nbsp;
+                                                        &nbsp;
+                                                        <a  href="asset-services?delete=xx" title="Delete">
+                                                            <i class="fa fa-trash-o"></i>
+                                                        </a>
+
+                                                    </div>
+                                                </td>
+                                        </tr>
+                                    {% endfor %}
+
+                                    </tbody>
+                                  </table>
+                                  {% endif%}
+     <!----------------------------------------------port_info_3信息展示结束---------------------------------------------------------->
+
+                                </div>
+                        </div>
+
+
+                      </div>
+
+                      <div class="panel panel-danger">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">漏洞威胁</h3>
+                        </div>
+                        <div class="panel-body">Panel content</div>
+                      </div>
+
+
+                      <div class="panel panel-success">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">信息泄露</h3>
+                        </div>
+                        <div class="panel-body">Panel content</div>
+                      </div>
+
+                      <div class="panel panel-warning">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">弱口令信息</h3>
+                        </div>
+                        <div class="panel-body">Panel content</div>
+                      </div>
+
+                      <div class="panel panel-info">
+                        <div class="panel-heading">
+                          <h3 class="panel-title">站点信息</h3>
+                        </div>
+
+                        <div class="col-lg-12 list_sx3" style="height:450px; overflow:hidden;">
+                                        <div style="min-height: 480px; word-break:break-all;" class="auto-wrap">
+                                        <b><pre> {{ i['site_info'] }} </pre></b></div>
+                                        <div class="list_sx3_b">
+                                            <i class="fa fa-chevron-down"></i></div>
+                            </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+
+            {% endfor %}
+
+            <div class="modal" id="serverInfo" >
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">指纹信息</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <pre id="server_info" title="Plugin Info">Loading...</pre>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="button" data-dismiss="modal">Close</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+</main>
+
+{% endblock %}
+{% block js %}
+    <!-- Data table plugin-->
+    <script type="text/javascript" src="static/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="static/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="static/js/jquery/jquery.bootstrap-duallistbox.js"></script>
+    <script src="static/js/server/asset-services-info.js"></script>
+     <script>
+         function server(){
+                $('#server_info').html('xxxx');
+         }
+
+         $(".list_sx3_b").on("click", function(){
+            var i = $(this).find('i')[0];
+            if($(i).attr("class")=="fa fa-chevron-down"){
+                $(this).parent().height("auto");
+                $(i).attr('class', 'fa fa-chevron-up');
+            }else{
+                $(this).parent().height(400);
+                $(i).attr('class', 'fa fa-chevron-down');
+            }
+        });
+
+     </script>
+{% endblock %}

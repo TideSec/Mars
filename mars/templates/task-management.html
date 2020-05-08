@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% block css %}
+
+{% endblock %}
+{% block content %}
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i>&nbsp;POC任务管理</h1>
+            <p></p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item active"><a href="#">任务列表</a></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <table class="table table-hover table-bordered" id="sampleTable">
+                        <thead>
+                        <tr class="text-center">
+                            <th>任务名称</th>
+                            <th>任务周期</th>
+                            <th>任务状态</th>
+                            <th>添加时间</th>
+                            <th>最后扫描</th>
+                            <th>任务管理</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in task_data %}
+                            <tr>
+                                <td>
+                                    <a href="vulnerability?task={{ i['_id'] }}">{{ i['task_name'] }}</a>
+                                </td>
+                                {% if i['task_recursion'] == '0' %}
+                                    <td>一次</td>
+                                {% elif i['task_recursion'] == '1' %}
+                                    <td>每天</td>
+                                {% elif i['task_recursion'] == '7' %}
+                                    <td>每周</td>
+                                {% elif i['task_recursion'] == '30' %}
+                                    <td>每月</td>
+                                {% endif %}
+                                <td>{{ i['task_status'] }}</td>
+                                <td>{{ i['start_date'] }}</td>
+                                <td>{{ i['end_date'] }}</td>
+                                <td class="text-center">
+                                    <a onclick="rescan_task('{{ i['_id'] }}')" role="button" href="#" title="Rescan">
+                                        <i class="fa fa-refresh"></i>&nbsp;&nbsp;
+                                    </a>
+                                    &nbsp;
+                                    <a onclick="task_edit_id('{{ i['_id'] }}')"  role="button" data-toggle="modal" href="#" title="Edit" data-target="#editTask">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    &nbsp;
+                                    <a onclick="task_delete('{{ i['_id'] }}')"  role="button" href="#" title="Delete">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <div class="modal fade" id="editTask" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        Edit Task
+                                    </h4>
+                                </div>
+                                <div class="modal-body" >
+                                    <form class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">任务名称</label>
+                                            <div>
+                                                <input type="text" class="form-control" id="task_name" name="taskname_val" placeholder="Task Name">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">任务ID</label>
+                                            <div>
+                                                <input type="text" class="form-control" id="task_id" name="task_id" disabled="disabled" title="Task ID">
+                                            </div>
+                                        </div>
+                                        <div class="space-6"></div>
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">扫描周期</label>
+                                            <div>
+                                                <select class="form-control" id="form-field-plan" title="Recursion" name="recursion_val">
+                                                    <option value="0">一次</option>
+                                                    <option value="1">每天</option>
+                                                    <option value="7">每周</option>
+                                                    <option value="30">每月</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="hr hr-16 hr-dotted"></div>
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">任务目标</label>
+                                            <div>
+                                                <textarea class="form-control" rows="5" id="scan_target_list" title="Target" name="target_val"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-hidden="true">取消
+                                            </button>
+                                            <button class="btn btn-primary task-update" type="button">
+                                                <span>更新</span> <i class="fa fa-send m-l-10"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+{% block js %}
+    <!-- Data table plugin-->
+    <script type="text/javascript" src="static/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="static/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="static/js/server/task-management.js"></script>
+{% endblock %}

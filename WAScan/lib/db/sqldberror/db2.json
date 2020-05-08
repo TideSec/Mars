@@ -1,0 +1,1 @@
+{"db":{"name":"DB2","regexp":["CLI Driver.*DB2","DB2 SQL error","\bdb2_\\w+\\(","SQLSTATE.+SQLCODE"]}}

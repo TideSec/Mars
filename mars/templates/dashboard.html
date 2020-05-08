@@ -1,0 +1,331 @@
+{% extends "base.html" %}
+{% block css %}
+    <link href="static/css/duallistbox/bootstrap-duallistbox.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-dashboard"></i> 仪表面板</h1>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item"><a href="#">仪表面板</a></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-small danger coloured-icon">
+                <a href="vulnerability" style="text-decoration:none;">
+                    <i class="icon fa fa-bug fa-3x"></i>
+                </a>
+                <div class="info">
+                    <h4>漏洞威胁</h4>
+                    <p><b>{{ dashboard_data['vul_count'] }}</b></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-small info coloured-icon">
+                <a href="plugin-management" style="text-decoration:none;">
+                    <i class="icon fa fa-gitlab fa-3x"></i>
+                </a>
+                <div class="info">
+                    <h4>插件数量</h4>
+                    <p><b>{{ dashboard_data['plugin_count'] }}</b></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-small primary coloured-icon">
+                <a href="week-passwd-list" style="text-decoration:none;">
+                    <i class="icon fa fa-gg fa-3x"></i>
+                </a>
+                <div class="info">
+                    <h4 >弱口令</h4>
+                    <p><b>{{ dashboard_data['week_passwd_count'] }}</b></p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="widget-small warning coloured-icon">
+                <a href="asset-services" style="text-decoration:none;">
+                    <i class="icon fa fa-snowflake-o fa-3x"></i>
+                </a>
+                <div class="info">
+                    <h4>资产统计</h4>
+                    <p><b>{{ dashboard_data['server_count'] }}</b></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="tile">
+                <h3 class="tile-title">威胁趋势</h3>
+                <div>
+                    <canvas class="embed-responsive-item" id="vulTrend"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="tile">
+                <h3 class="tile-title">Top 10 漏洞</h3>
+                <div>
+                    <canvas class="embed-responsive-item" id="vulStats"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="tile">
+                <h3 class="tile-title">资产统计</h3>
+                <div>
+                    <canvas class="embed-responsive-item" id="hostTrend"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="tile">
+                <h3 class="tile-title">弱口令</h3>
+                <div>
+                    <canvas class="embed-responsive-item" id="weekpasswordStats"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{#    <div class="row">#}
+{#        <div class="col-md-4">#}
+{#            <div class="tile">#}
+{#                <h3 class="tile-title">Security Advisories</h3>#}
+{#                <div>#}
+{#                    <div id="360Rss"></div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#        <div class="col-md-4">#}
+{#            <div class="tile">#}
+{#                <h3 class="tile-title">Security News</h3>#}
+{#                <div>#}
+{#                    <div id="freebufRss"></div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{##}
+{#        <div class="col-md-4">#}
+{#            <div class="tile">#}
+{#                <h3 class="tile-title">Newest PoC</h3>#}
+{#                <div>#}
+{#                    <div id="seebugRss"></div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+</main>
+
+{% endblock %}
+{% block js %}
+    <!-- Data table plugin-->
+    <script type="text/javascript" src="static/js/plugins/Chart.js"></script>
+    <script src="static/js/plugins/FeedEk.js"></script>
+
+    <script>
+        var vulStats = document.getElementById("vulStats");
+        var vulTrend = document.getElementById("vulTrend");
+        var hostTrend = document.getElementById("hostTrend");
+        var weekpasswordStats = document.getElementById("weekpasswordStats");
+
+        var vulChart = new Chart(vulTrend, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for vul_date in dashboard_data['vul_trend_date'] %}
+                        '{{ vul_date }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Vulnerability',
+                    data: [
+                        {% for count in dashboard_data['vul_trend_count'] %}
+                            {{ count }},
+                        {% endfor %}
+                    ],
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    borderColor: '#35c9a3',
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                },
+                {
+                    label: 'Week Password',
+                    data: [
+                        {% for count in dashboard_data['week_passwd_trend'] %}
+                            {{ count }},
+                        {% endfor %}
+                    ],
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    borderColor: '#55acc9',
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                }
+                ],
+            },
+            options: {}
+        });
+
+        var hostLine = new Chart(hostTrend, {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for a in dashboard_data['host_trend_date'] %}
+                        '{{ a }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Host',
+                    data: [
+                        {% for b in dashboard_data['host_trend_count'] %}
+                            {{ b }},
+                        {% endfor %}
+                    ],
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    borderColor: '#35c9a3',
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                },
+                {
+                    label: 'Server',
+                    data: [
+                        {% for s in dashboard_data['server_trend_count'] %}
+                            {{ s }},
+                        {% endfor %}
+                    ],
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    borderColor: '#55acc9',
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                }
+                ],
+            },
+            options: {}
+        });
+
+        var vulStats = new Chart(vulStats,{
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [
+                        {% for count in dashboard_data['vul_stats_count'] %}
+                            '{{ count }}',
+                        {% endfor %}
+                    ],
+
+                    backgroundColor: [
+                        '#1abc9c',
+                        '#3498db',
+                        '#9b59b6',
+                        '#f1c40f',
+                        '#e67e22',
+                        '#e74c3c',
+                        '#2c3e50',
+                        '#f39c12',
+                        '#badc58',
+                        '#7ed6df'
+                    ],
+                }],
+                labels: [
+                    {% for name in dashboard_data['vul_stats_name'] %}
+                        '{{ name }}',
+                    {% endfor %}
+                ],
+                color: "#46BFBD",
+                highlight: "#5AD3D1",
+            },
+            options: {
+                {#responsive: false,#}
+            }
+        });
+
+        var passwdStats = new Chart(weekpasswordStats,{
+            type: 'pie',
+            data: {
+                datasets: [{
+                    data: [
+                        {% for p_c in dashboard_data['password_stats_count'] %}
+                            '{{ p_c }}',
+                        {% endfor %}
+                    ],
+
+                    backgroundColor: [
+                        '#1abc9c',
+                        '#3498db',
+                        '#9b59b6',
+                        '#f1c40f',
+                        '#e67e22',
+                        '#e74c3c',
+                        '#2c3e50',
+                        '#f39c12',
+                        '#badc58',
+                        '#7ed6df'
+                    ],
+                }],
+                labels: [
+                    {% for passwd in dashboard_data['password_stats_val'] %}
+                        '{{ passwd }}',
+                    {% endfor %}
+                ],
+                color: "#46BFBD",
+                highlight: "#5AD3D1",
+            },
+            options: {
+                {#responsive: false,#}
+            }
+        });
+
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('#seebugRss').FeedEk({
+              FeedUrl:'https://www.seebug.org/rss/new/',
+              MaxCount: 6,
+              ShowDesc: false,
+              ShowPubDate: false,
+            });
+
+            $('#freebufRss').FeedEk({
+              FeedUrl:'http://www.freebuf.com/feed',
+              MaxCount: 6,
+              ShowDesc: false,
+              ShowPubDate: false,
+            });
+
+            $('#360Rss').FeedEk({
+              FeedUrl:'https://cert.360.cn/feed',
+              MaxCount: 6,
+              ShowDesc: false,
+              ShowPubDate: false,
+            });
+        });
+    </script>
+{% endblock %}

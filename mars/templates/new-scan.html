@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block css %}
+    <link href="static/css/duallistbox/bootstrap-duallistbox.css" rel="stylesheet">
+
+{% endblock %}
+{% block content %}
+
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-edit"></i> 新建任务</h1>
+            <p>创建新的poc任务</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item">POC检测</li>
+            <li class="breadcrumb-item"><a href="#">新建任务</a></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="row">
+                    <div class="col-lg-2">
+                    </div>
+                    <div class="col-lg-8">
+                        <form class="form-horizontal">
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">任务名称 <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <input class="form-control" name="taskname_val" type="text" placeholder="任务名称">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">扫描周期 </label>
+                                <div class="col-md-9">
+                                    <select class="form-control col-md-6" name="recursion_val" title="Recursion">
+                                        <option value="0">一次</option>
+                                        <option value="1">每天</option>
+                                        <option value="7">每周</option>
+                                        <option value="30">每月</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">POC选择<span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <select multiple="multiple" size="7" name="plugin_list">
+                                        {% for a in plugin_info %}
+                                            <option value="{{ a['_id'] }}">{{ a['plugin_name'] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">从资产任务中添加<span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <select multiple="multiple" size="7" name="asset_list">
+                                        {% for a in asset_info %}
+                                            <option value="{{ a['_id'] }}">{{ a['asset_name'] }} - {{ a['asset_server_num'] }}- {{ a['asset_cus_name'] }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <label class="control-label col-md-3">手工添加 <span class="text-danger">*</span></label>
+                                <div class="col-md-9">
+                                    <textarea class="form-control" name="target_val" rows="8" placeholder="Example:&#13;&#10;192.168.1.1&#13;&#10;192.168.1.0/24&#13;&#10;www.example.com"></textarea>
+                                </div>
+                            </div>
+
+                        <button class="btn btn-primary" id="showConfig" type="button"><i class="fa fa-fw fa-lg fa-check-circle"></i>添加</button>
+                        </form>
+
+                    </div>
+                    <div class="col-md-2">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% block js %}
+    <script src="static/js/jquery/jquery.bootstrap-duallistbox.js"></script>
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+
+    <script src="static/js/server/new-scan.js"></script>
+{% endblock %}
+{% endblock %}

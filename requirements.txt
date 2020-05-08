@@ -1,0 +1,14 @@
+pymysql
+DBUtils
+wafw00f
+pexpect
+requests
+gevent
+pymongo
+hackhttp
+dnspython
+lxml
+python-nmap
+flask
+bs4
+qqwry

@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+{% block css %}
+    <link href="static/css/duallistbox/bootstrap-duallistbox.css" rel="stylesheet">
+
+{% endblock %}
+{% block content %}
+
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-edit"></i>Advanced Options</h1>
+        </div>
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item">Config</li>
+            <li class="breadcrumb-item"><a href="#">Advanced Options</a></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="tile">
+                <h3 class="tile-title">Thread Settings</h3>
+                <div class="tile-body">
+                    <form class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">PoC Scanner<span class="text-danger">*</span></label>
+                            <div class="col-md-8">
+                                <input class="form-control" value="{{ config_info['poc_thread'] }}" type="text" id="poc_thread" placeholder="Max simultaneous hosts per scan"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Discovery<span class="text-danger">*</span></label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" value="{{ config_info['discovery_thread'] }}" id='discovery_thread' placeholder="Max simultaneous hosts per scan">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">SubDomain<span class="text-danger">*</span></label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" value="{{ config_info['subdomain_thread'] }}" id='subdomain_thread' placeholder="Max simultaneous hosts per scan">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Port Scanner<span class="text-danger">*</span></label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" value="{{ config_info['port_thread'] }}" id='port_thread' placeholder="Max simultaneous hosts per scan">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Auth Tester<span class="text-danger">*</span></label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" value="{{ config_info['auth_tester_thread'] }}" id='auth_tester_thread' placeholder="Max simultaneous hosts per scan">
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Discovery Time<span class="text-danger">*</span></label>
+                            <div class="col-md-8">
+                                <input class="form-control" type="text" value="{{ config_info['discovery_time'] }}" name="discovery_time_val" id='discovery_time_setting' placeholder="-">
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="tile-footer"><a class="btn btn-primary update-thread-config" href="#"><i class="fa fa-check-circle"></i> Submit</a></div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="tile">
+                <h3 class="tile-title">Subdomain Dictionary</h3>
+                <div class="tile-body">
+                    <form class="form-horizontal">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label class="control-label no-padding-right">Second-level domain<span class="text-danger">*</span></label>
+                                <textarea class="form-control" id='subdomain_dict_2' type="text" placeholder="One value per line" rows="10">{{ config_info['subdomain_dict_2'] }}</textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="control-label no-padding-right">Three-level domain<span class="text-danger">*</span></label>
+                                <textarea class="form-control" id='subdomain_dict_3' type="text" placeholder="One value per line" rows="10">{{ config_info['subdomain_dict_3'] }}</textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tile-footer"><a class="btn btn-primary update-subdomain-dict-config" href="#"><i class="fa fa-check-circle"></i> Submit</a></div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="tile">
+                <h3 class="tile-title">Port List</h3>
+                <div class="tile-body">
+                    <form class="form-horizontal">
+                        <div class="form-group row">
+                            <label class="control-label col-md-3">Port List<span class="text-danger">*</span></label>
+                            <div class="col-md-8">
+                                <textarea class="form-control" type="text" id="port_list" rows="6" placeholder="Server Discovery Port">{{ config_info['port_list'] }}</textarea>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="tile-footer"><a class="btn btn-primary update-port-config" href="#"><i class="fa fa-check-circle"></i> Submit</a></div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="tile">
+                <h3 class="tile-title">Username & Password</h3>
+                <div class="tile-body">
+                    <form class="form-horizontal">
+                        <div class="form-group row">
+                            <div class="col-md-6">
+                                <label class="control-label no-padding-right">Username<span class="text-danger">*</span></label>
+                                <textarea class="form-control" id='username_list' type="text" placeholder="One username per line" rows="10">{{ config_info['username_dict'] }}</textarea>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="control-label no-padding-right">Password<span class="text-danger">*</span></label>
+                                <textarea class="form-control" id='password_list' type="text" placeholder="One password per line" rows="10">{{ config_info['password_dict'] }}</textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="tile-footer"><a class="btn btn-primary update-user-passwd" href="#"><i class="fa fa-check-circle"></i> Submit</a></div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+{% block js %}
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script type="text/javascript" src="static/js/plugins/laydate/laydate.js"></script>
+    <script src="static/js/server/settings.js"></script>
+    <script>
+        laydate.render({
+            elem: '#discovery_time_setting',
+            type: 'time',
+            lang: 'en'
+        });
+    </script>
+
+{% endblock %}
+{% endblock %}

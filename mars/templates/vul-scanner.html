@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block css %}
+{% endblock %}
+{% block content %}
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i>&nbsp;漏洞扫描</h1>
+            <p>Web应用漏洞扫描</p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item active"><a href="#">漏洞扫描</a></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                        <div class="row"><div class="col-sm-12 col-md-6">
+                            <div class="dataTables_length" id="sampleTable_length">
+                                <a class="btn btn-primary" href="#" data-target="#newScan" data-toggle="modal" title="New Scan">
+                                    <i class="fa fa-gitlab fa-lg"></i> 新建扫描</a>
+                                <br>
+                                <br>
+                            </div>
+                        </div>
+                        </div>
+
+                        <table class="table table-hover table-bordered" id="sampleTable">
+                            <thead>
+                            <tr class="text-center">
+                                <th>任务名称</th>
+                                <th>扫描类型</th>
+                                <th>任务目标</th>
+                                <th>备注信息</th>
+                                <th>扫描日期</th>
+                                <th>任务管理</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for i in vul_task %}
+                                <tr class="text-center">
+                                    <td>
+                                        <a href="#" target="view_window">{{ i['task_name'] }}</a>
+                                    </td>
+                                    {% if i['scan_type'] == '0' %}
+                                        <td>Full Scan</td>
+                                    {% elif i['scan_type'] == '1' %}
+                                        <td>High Risk Vulnerabilities</td>
+                                    {% elif i['scan_type'] == '2' %}
+                                        <td>Cross-site Scripting Vulnerabilities</td>
+                                    {% elif i['scan_type'] == '3' %}
+                                        <td>SQL Injection Vulnerabilities</td>
+                                    {% elif i['scan_type'] == '4' %}
+                                        <td>Weak Passwords</td>
+                                    {% elif i['scan_type'] == '5' %}
+                                        <td>Crawl Only</td>
+                                    {% endif %}
+                                    <td>{{ i['target_list'] | join(',') | truncate(20 , True)}}...</td>
+                                    <td>{{ i['description'] }}</td>
+                                    <td>{{ i['date'] }}</td>
+                                    <td class="text-center">
+                                        <div class="hidden-sm hidden-xs action-buttons">
+                                            <a onclick="down_report('{{ i['_id'] }}')"  role="button" data-target="#downloadReport" data-toggle="modal" href="#" title="Download Report">
+                                                <i class="fa fa-download"></i>
+                                            </a>
+                                            &nbsp;
+                                            &nbsp;
+                                            <a role="button" href="#" onclick="delete_task('{{ i['_id'] }}')" title="Delete">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                        <div class="modal" id="downloadReport" >
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">报告下载</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    </div>
+
+                                    <div class="modal-body">
+                                        <form class="form-group row">
+                                            <div class="col-md-2"></div>
+                                            <div class="col-md-4" id="report_download_html">
+                                                <p>Generating...</p>
+                                            </div>
+                                            <div class="col-md-4" id="report_download_pdf">
+                                                {# <p>Please wait...</p>#}
+                                            </div>
+                                            <div class="col-md-2"></div>
+                                        </form>
+
+                                        <div class="modal-footer">
+                                            <p class="text-muted">如果页面返回"Not Found(404)", 请在几分钟后重试下载。</p>
+                                            <button class="btn default " type="button" data-dismiss="modal">关闭</button>
+                                        </div>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+
+                        <div class="modal" id="newScan" >
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">新建扫描</h5>
+                                        <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form class="form-horizontal" role="form">
+                                            <div class="form-group">
+                                                <label class="control-label no-padding-right">任务名称 <span class="text-danger">*</span></label>
+                                                <div>
+                                                    <input type="text" class="form-control" id="task_name" name="task_name" placeholder="">
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label no-padding-right">任务目标 <span class="text-danger">*</span></label>
+                                                <div>
+                                                    <textarea class="form-control" id="target_addr" name="target_addr" rows="4" placeholder="每个任务一行:&#13;&#10;http://example.com&#13;&#10;http://example.com"></textarea>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label no-padding-right">扫描类型 <span class="text-danger">*</span></label>
+                                                <div >
+                                                    <select class="form-control col-md-7" id="scan_type" title="Scan Type" name="scan_type">
+                                                        <option value="0">完全扫描</option>
+                                                        <option value="1">高危扫描</option>
+                                                        <option value="2">XSS检测</option>
+                                                        <option value="3">SQL注入</option>
+                                                        <option value="4">弱口令检测</option>
+                                                        <option value="5">仅使用爬虫</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="hr hr-16 hr-dotted"></div>
+                                            <div class="form-group">
+                                                <label class="control-label no-padding-right">备注信息 </label>
+                                                <div>
+                                                    <input type="text" class="form-control" id="description_val" name="description_val" placeholder="">
+                                                </div>
+                                            </div>
+
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-hidden="true">取消
+                                        </button>
+                                        <button class="btn btn-primary new-scan" type="button">
+                                            <span>添加</span>
+                                        </button>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+{% block js %}
+    <!-- Data table plugin-->
+    <script type="text/javascript" src="static/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="static/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="static/js/server/vul-scanner.js"></script>
+{% endblock %}

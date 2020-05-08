@@ -1,0 +1,1 @@
+{"db":{"name":"PostgreSQL","regexp":["PostgreSQL.*ERROR","Warning.*\\Wpg_.*","valid PostgreSQL result","Npgsql\\.","PG::SyntaxError:","org\\.postgresql\\.util\\.PSQLException","ERROR:\\s\\ssyntax error at or near "]}}

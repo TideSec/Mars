@@ -1,0 +1,337 @@
+{% extends "base.html" %}
+{% block css %}
+    <link href="static/css/duallistbox/bootstrap-duallistbox.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<main class="app-content">
+    <div class="app-title">
+        <div>
+            <h1><i class="fa fa-th-list"></i>&nbsp;资产任务</h1>
+            <p></p>
+        </div>
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+            <li class="breadcrumb-item">首页</li>
+            <li class="breadcrumb-item active"><a href="#">资产任务</a></li>
+        </ul>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <table class="table table-hover table-bordered" id="sampleTable">
+                        <thead>
+                        <tr class="text-center">
+                            <th>资产名称</th>
+                            <th>主机数量</th>
+                            <th>所属客户</th>
+                            <th>操作人员</th>
+                            <th>是否探测</th>
+                            <th>任务状态</th>
+                            <th>任务周期</th>
+                            <th>扫描次数</th>
+                            <th>最近扫描</th>
+                            <th>任务管理</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for i in asset_info %}
+                            <tr class="text-center">
+                                <td>
+                                    <a href="asset-services?asset={{ i['_id'] }}">{{ i['asset_name'] }}</a>
+                                </td>
+                                <td>{{ i['asset_server_num'] }}</td>
+
+                                <td><a href="asset-management?cus={{ i['asset_cus_id'] }}" >{{ i['asset_cus_name'] }}</a></td>
+
+                                <td>{{ i['admin_name'] }}</td>
+
+                                <td>{{ i['discover_option'] }}</td>
+
+                                {% if i['task_state'] == 'new' %}
+                                    <td class="bg-info">队列中</td>
+                                {% elif i['task_state'] == 'ing' %}
+                                    <td class="bg-warning">检测中</td>
+                                {% elif i['task_state'] == 'ok' %}
+                                    <td>已完成</td>
+
+                                {% endif %}
+
+
+                                {% if i['asset_scan_zhouqi'] == '0' %}
+                                    <td>一次</td>
+                                {% elif i['asset_scan_zhouqi'] == '1' %}
+                                    <td>每天</td>
+                                {% elif i['asset_scan_zhouqi'] == '7' %}
+                                    <td>每周</td>
+                                {% elif i['asset_scan_zhouqi'] == '30' %}
+                                    <td>每月</td>
+                                {% elif i['asset_scan_zhouqi'] == '90' %}
+                                    <td>每季度</td>
+                                {% elif i['asset_scan_zhouqi'] == '180' %}
+                                    <td>每半年</td>
+                                {% elif i['asset_scan_zhouqi'] == '365' %}
+                                    <td>每年</td>
+                                {% endif %}
+
+                                {% if i['scan_times'] %}
+                                <td>{{ i['scan_times']  | int}}</td>
+                                {% else %}
+                                <td>0</td>
+                                {% endif %}
+
+
+                                <td>{{ i['updatetime'] }}</td>
+
+
+                                <td class="text-center">
+                                    <a onclick="get_asset_host('{{ i['_id'] }}')" role="button" href="#" title="New Vul Scan" data-toggle="modal" data-target="#newScan">
+                                        <i class="fa fa-bug"></i>
+                                    </a>
+                                    &nbsp;
+                                    &nbsp;
+                                    <a onclick="get_asset_host('{{ i['_id'] }}')" role="button" href="#" title="New Auth Tester" data-toggle="modal" data-target="#newAuthtest">
+                                        <i class="fa fa-gavel"></i>
+                                    </a>
+                                    &nbsp;
+                                    &nbsp;
+                                    <a onclick="asset_info('{{ i['_id'] }}')"  role="button" data-toggle="modal" href="#" title="Edit" data-target="#editAsset">
+                                        <i class="fa fa-pencil"></i>
+                                    </a>
+                                    &nbsp;
+                                    &nbsp;
+                                    <a onclick="delete_asset('{{ i['_id'] }}')"  role="button" href="#" title="Delete">
+                                        <i class="fa fa-trash-o"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <div class="modal fade" id="editAsset" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><!-- /edit-modal -->
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        资产任务编辑
+                                    </h4>
+                                </div>
+                                <div class="modal-body" >
+                                    <form class="form-horizontal" role="form">
+                                        <div class="form-group">
+                                            <label for="name"> 资产名称 <span class="text-danger">*</span></label>
+                                            <div>
+                                                 <input type="text" class="form-control" name="asset_name_edit" id="asset_name_edit" placeholder="资产名称">
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name"> 资产任务ID</label>
+                                            <input type="text" title="Asset ID" class="form-control" name="asset_id_edit" id="asset_id_edit" disabled="disabled">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="name"> 所属客户 <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="asset_cus_edit" name="asset_cus_edit" placeholder="所属客户">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="name"> 资产列表 <span class="text-danger">*</span></label>
+                                            <textarea class="form-control" rows="3" id="asset_host_edit" name="asset_host_edit" placeholder="Loading..."></textarea>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="name"> 操作人员 <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="asset_admin_edit" name="asset_admin_edit" placeholder="操作人员">
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label for="name"> 任务周期 <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" id="asset_scan_zhouqi_edit" name="asset_scan_zhouqi_edit" placeholder="">
+                                        </div>
+
+                                        <div class="toggle lg">
+                                            <label>重置为新任务
+                                                <input type="checkbox" name="asset_state_edit" ><span class="button-indecator"></span>
+                                            </label>
+                                        </div>
+
+
+                                        <div class="toggle lg">
+                                            <label>开启探测
+                                                <input type="checkbox" id="asset_discover_option_edit" name="asset_discover_option_edit"  checked><span class="button-indecator"></span>
+                                            </label>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-hidden="true">Cancel
+                                            </button>
+                                            <button class="btn btn-primary asset-update" type="button">
+                                                <span>更新</span> <i class="fa fa-send m-l-10"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal-end -->
+
+                    <div class="modal fade" id="newScan" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><!-- /scan-modal -->
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        New Scan
+                                    </h4>
+                                </div>
+                                <div class="modal-body" >
+                                    <form class="form-horizontal" role="form">
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Task Name <span class="text-danger">*</span></label>
+                                            <div>
+                                                <input type="text" class="form-control" id="task_name" name="taskname_val" placeholder="Task Name">
+                                            </div>
+                                        </div>
+
+                                        <div class="space-6"></div>
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Recursion</label>
+                                            <div>
+                                                <select class="form-control" id="form-field-plan" title="Recursion" name="recursion_val">
+                                                    <option value="0">Once</option>
+                                                    <option value="1">Every day</option>
+                                                    <option value="7">Every week</option>
+                                                    <option value="30">Every month</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Plugins Select <span class="text-danger">*</span></label>
+                                            <div>
+                                                <select multiple="multiple" size="6" name="plugin_list" title="Plugin Select">
+                                                    {% for a in plugin_info %}
+                                                        <option value="{{ a['_id'] }}">{{ a['plugin_name'] }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr hr-16 hr-dotted"></div>
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Target <span class="text-danger">*</span></label>
+                                            <div>
+                                                <textarea class="form-control" rows="5" id="scan_target_list" title="Target" name="target_val" placeholder="Loading..."></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                            <button class="btn btn-primary " id="asset-scan" type="button">
+                                                <span>Submit</span> <i class="fa fa-send m-l-10"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal-end -->
+                    <div class="modal fade" id="newAuthtest" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><!-- /scan-modal -->
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h4 class="modal-title" id="myModalLabel">
+                                        New Auth Tester
+                                    </h4>
+                                </div>
+                                <div class="modal-body" >
+                                    <form class="form-horizontal" role="form">
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Task Name <span class="text-danger">*</span></label>
+                                            <div>
+                                                <input type="text" class="form-control" name="auth_task_name" placeholder="Task Name">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Recursion</label>
+                                            <div>
+                                                <select class="form-control" id="form-field-plan" title="Recursion" name="auth_recursion">
+                                                    <option value="0">Once</option>
+                                                    <option value="1">Every day</option>
+                                                    <option value="7">Every week</option>
+                                                    <option value="30">Every month</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Args</label>
+                                            <div>
+                                                <input class="form-control" name="auth_args" title="Args" placeholder=""/>
+                                            </div>
+                                        </div>
+
+                                        <div class="space-6"></div>
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Protocols Select <span class="text-danger">*</span></label>
+                                            <div>
+                                                <select multiple="multiple" size="6" name="auth_service_list" title="Plugin Select">
+                                                    {% for a in protocols %}
+                                                        <option value="{{ a }}">{{ a | upper }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="hr hr-16 hr-dotted"></div>
+                                        <div class="form-group">
+                                            <label class="control-label no-padding-right">Target <span class="text-danger">*</span></label>
+                                            <div>
+                                                <textarea class="form-control" rows="5" id="auth_target_list" title="Target" name="auth_target_list" placeholder="Loading..."></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group row">
+                                            <div class="col-md-6">
+                                                <label class="control-label no-padding-right">Username<span class="text-danger">*</span></label>
+                                                <div>
+                                                    <textarea class="form-control" placeholder="One username per line" rows="6" name="auth_username_list">{{ username_list }}</textarea>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="control-label no-padding-right">Password<span class="text-danger">*</span></label>
+                                                <div>
+                                                    <textarea class="form-control" placeholder="One password per line" rows="6" name="auth_password_list">{{ password_list }}</textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                            <button class="btn btn-primary " id="asset-auth-tasks" type="button">
+                                                <span>Submit</span> <i class="fa fa-send m-l-10"></i>
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div><!-- /.modal-content -->
+                        </div><!-- /.modal-dialog -->
+                    </div><!-- /.modal-end -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% endblock %}
+{% block js %}
+    <!-- Data table plugin-->
+    <script type="text/javascript" src="static/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="static/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="static/js/jquery/jquery.bootstrap-duallistbox.js"></script>
+
+    <script src="static/js/server/asset-management.js"></script>
+{% endblock %}

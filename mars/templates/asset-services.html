@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+{% block css %}
+    <link href="static/css/duallistbox/bootstrap-duallistbox.css" rel="stylesheet">
+{% endblock %}
+{% block content %}
+<main class="app-content">
+  <div class="app-title">
+    <div>
+      <h1><i class="fa fa-th-list"></i>&nbsp;资产列表</h1>
+      <p></p>
+    </div>
+    <ul class="app-breadcrumb breadcrumb side">
+      <li class="breadcrumb-item"><i class="fa fa-home fa-lg"></i></li>
+      <li class="breadcrumb-item">首页</li>
+      <li class="breadcrumb-item active"><a href="#">资产列表</a></li>
+    </ul>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="tile">
+        <div class="tile-body">
+            <div id="sampleTable_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4 no-footer">
+                <div class="row">
+                    <div class="col-sm-12 col-md-6">
+                        <div class="dataTables_length" id="sampleTable_length">
+                            <a class="btn btn-primary" href="#" onclick="newScan()" role="button" title="New Scan" data-toggle="modal" data-target="#newScan">
+                                <i class="fa fa-gitlab fa-lg"></i> 新建扫描</a>
+                            <br>
+                            <br>
+                        </div>
+                        <div class="modal fade" id="newScan" tabindex="-1"  role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"><!-- /scan-modal -->
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="myModalLabel">
+                                            New Scan
+                                        </h4>
+                                    </div>
+                                    <div class="modal-body" >
+                                        <form class="form-horizontal" role="form">
+
+                                            <div class="form-group">
+                                                <label class="control-label no-padding-right">Task Name <span class="text-danger">*</span></label>
+                                                <div>
+                                                    <input type="text" class="form-control" id="task_name" name="taskname_val" placeholder="Task Name">
+                                                </div>
+                                            </div>
+
+                                            <div class="space-6"></div>
+                                            <div class="form-group">
+                                                <label class="control-label no-padding-right">Recursion</label>
+                                                <div>
+                                                    <select class="form-control" id="form-field-plan" title="Recursion" name="recursion_val">
+                                                        <option value="0">Once</option>
+                                                        <option value="1">Every day</option>
+                                                        <option value="7">Every week</option>
+                                                        <option value="30">Every month</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label class="control-label no-padding-right">Plugin Select <span class="text-danger">*</span></label>
+                                                <div>
+                                                    <select multiple="multiple" size="6" name="plugin_list" title="Plugin Select">
+                                                        {% for a in plugin_info %}
+                                                            <option value="{{ a['_id'] }}">{{ a['plugin_name'] }}</option>
+                                                        {% endfor %}
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="hr hr-16 hr-dotted"></div>
+                                            <div class="form-group">
+                                                <label class="control-label no-padding-right">Target <span class="text-danger">*</span></label>
+                                                <div>
+                                                    <textarea class="form-control" rows="5" id="scan_target_list" title="Target" name="target_val" placeholder="Loading..."></textarea>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"  data-dismiss="modal" aria-hidden="true">Cancel</button>
+                                                <button class="btn btn-primary " id="server-scan" type="button">
+                                                    <span>Submit</span> <i class="fa fa-send m-l-10"></i>
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div><!-- /.modal-content -->
+                            </div><!-- /.modal-dialog -->
+                        </div><!-- /.modal-end -->
+                    </div>
+                </div>
+            </div>
+          <table class="table table-hover table-bordered" id="sampleTable">
+            <thead>
+              <tr class="text-center">
+                  <th>
+                      <input title="checkbox_all" onclick="selectAll()" type="checkbox" name="allSelect" value="1" />
+                  </th>
+                  <th width="10%">主机</th>
+                  <th width="19%">标题</th>
+                  <th width="8%">状态</th>
+                  <th width="8%" align="center">IP地址</th>
+                  <th width="12%">端口</th>
+                  <th width="8%" align="center">地区</th>
+                  <th width="11%" align="center">操作系统</th>
+                  <th width="11%" align="center">扫描时间</th>
+                  <th width="5%" align="center">变更</th>
+                  <th width="8%" align="center">管理</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for i in server_data %}
+                <tr >
+                    <td class="text-center">
+                        <input title="checkbox" type="checkbox" name='select_id' value="{{ i['_id'] }}" />
+                    </td>
+                    <td class="text-center"><a href="asset-info?server={{ i['_id'] }}" target="_blank">{{ i['domain'] | truncate(20, True) }}</a></td>
+                    <td class="text-center">{{ i['title'] | truncate(14, True)}}</td>
+                    <td class="text-center">{{ i['state'] | truncate(13, True)}}</td>
+                    <td class="text-center">{{ i['ip'] }}</td>
+
+                    <td class="text-center">
+                        {% if i.ports %}
+                           {% for port in i['ports'] %}
+                                {% if loop.index<5 %}
+                                    {{ port }}
+                                {% endif %}
+                           {% endfor %}
+                        {% elif i.cdn %}
+                           {% if i['cdn'] !='' %}{{ i['cdn'] }}{% endif %}
+                        {% endif %}
+                    </td>
+
+                    <td class="text-center">
+                        {% if i.ip_info %}
+                            {{ i['ip_info'][0]['area'] }}
+                        {% endif %}
+                    </td>
+
+                    <td class="text-center">{{ i['os'] | truncate(18, True) }}</td>
+                    <td class="text-center">{{ i['updatetime'] }}</td>
+
+                    <td class="text-center">
+                    {% if i.info_changed %}
+                        {% if i['info_changed'] == '1' %}
+                            <a href="asset-info?server={{ i['_id'] }}" target="_blank"><i class="fa fa-info-circle" style="color:red"></i></a>
+                        {% endif %}
+                    {% endif %}
+                    </td>
+
+                    <td class="text-center">
+                        <div class="hidden-sm hidden-xs action-buttons">
+                            <a onclick="server_info('{{ i['_id'] }}')"  role="button" data-target="#serverInfo" data-toggle="modal" href="#" title="Plugin Info">
+                                <i class="fa fa-search-plus"></i>
+                            </a>
+                            &nbsp;
+                            &nbsp;
+                            &nbsp;
+                            <a  href="asset-services?delete={{ i['_id'] }}" title="Delete">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+            <div class="modal" id="serverInfo" >
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Server Info</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        </div>
+                        <div class="modal-body">
+                            <pre id="server_info" title="Plugin Info">Loading...</pre>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-primary" type="button" data-dismiss="modal">Close</button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
+
+            </div>
+        </div>
+      </div>
+    </div>
+</main>
+
+{% endblock %}
+{% block js %}
+    <!-- Data table plugin-->
+    <script type="text/javascript" src="static/js/plugins/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="static/js/plugins/dataTables.bootstrap.min.js"></script>
+    <script src="static/js/plugins/sweetalert/sweetalert.min.js"></script>
+    <script src="static/js/jquery/jquery.bootstrap-duallistbox.js"></script>
+    <script src="static/js/server/asset-services-list.js"></script>
+{% endblock %}

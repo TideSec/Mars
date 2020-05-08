@@ -1,0 +1,1 @@
+{"db":{"name":"Sybase","regexp":["Warning.*sybase.*","Sybase message","Sybase.*Server message.*","SybSQLException","com\\.sybase\\.jdbc"]}}
