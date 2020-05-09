@@ -125,7 +125,7 @@ su -l acunetix -c /home/acunetix/.acunetix_trial/start.sh
 ## 资产管理
 资产管理是整个平台最基础也算最核心的功能，对资产进行POC检测或者弱口令检测，首先依赖于资产能被发现、指纹能被识别。
 
-比如通过资产探测发现某服务器使用了iis，那么系统会自动调用IIS短文件名检测POC、IIS PUT检测POC进行自动检测，如果发现使用了weblogic会把weblogic的所有反序列化漏洞POC都检测一遍，如果发现系统使用了Mysql，会自动调用mysql弱口令检测程序进行弱口令测试，等等。这些能自动检测的前提就是能发现资产指纹信息，目前我们也搭建了自己的潮汐指纹识别平台，目目前已经开源[http://finger.tidesec.com](http://finger.tidesec.com)。
+比如通过资产探测发现某服务器使用了iis，那么系统会自动调用IIS短文件名检测POC、IIS PUT检测POC进行自动检测，如果发现使用了weblogic会把weblogic的所有反序列化漏洞POC都检测一遍，如果发现系统使用了Mysql，会自动调用mysql弱口令检测程序进行弱口令测试，等等。这些能自动检测的前提就是能发现资产指纹信息，目前我们也搭建了自己的潮汐指纹识别平台，目前已经开源[http://finger.tidesec.com](http://finger.tidesec.com)。
 
 ![pic](images/pic15.png)
 
