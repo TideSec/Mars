@@ -31,7 +31,7 @@ Mars(战神),对之前的[WDScanner](https://github.com/TideSec/WDScanner)的全
 - [2019-02-22] 完成部分核心功能
 - [2019-01-15] 规划整体架构
  
-**tips：**2020年5月11日，代码略有更新，主要修复几个bug，可在docker中的中进行代码更新。
+**tips：** 2020年5月11日，代码略有更新，主要修复几个bug，可在docker中的中进行代码更新。
 ```
 cd /root/
 rm -rf /root/Tide-Mars
