@@ -25,7 +25,7 @@ plugin_db = db_name_conf()['plugin_db']
 
 # tasks view
 @poc_scanner.route('/task-management')
-#@login_check
+@login_check
 def tasks_view():
     # delete task
     if request.args.get('delete'):
@@ -64,7 +64,7 @@ def tasks_view():
 
 # task edit
 @poc_scanner.route('/task-edit', methods=['POST'])
-#@login_check
+@login_check
 def tasks_edit():
     # task update
     task_name = request.form.get('taskname_val')
@@ -89,7 +89,7 @@ def tasks_edit():
 
 # new scan view
 @poc_scanner.route('/new-scan', methods=['GET'])
-#@login_check
+@login_check
 def scan_view():
     # default create scan view
 
@@ -107,7 +107,7 @@ def scan_view():
 
 # create task
 @poc_scanner.route('/add-task', methods=['POST'])
-#@login_check
+@login_check
 def add_task():
     # create task from new scan view (post)
     if request.form.get('source') == 'scan_view':
@@ -190,7 +190,7 @@ def add_task():
 
 
 @poc_scanner.route('/vulnerability', methods=['POST', 'GET'])
-#@login_check
+@login_check
 def vulnerability_view():
     if request.method == "GET":
         # vulnerability delete

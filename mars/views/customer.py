@@ -26,7 +26,7 @@ plugin_db = db_name_conf()['plugin_db']
 
 # tasks view
 @customer.route('/cus-management')
-# @login_check
+@login_check
 def cus_view():
     # delete task
     if request.args.get('delete'):
@@ -79,7 +79,7 @@ def cus_view():
 
 # task edit
 @customer.route('/cus-edit', methods=['POST'])
-# @login_check
+@login_check
 def cus_edit():
     # cus_name = request.form.get('cus_name')
     # task_plan = request.form.get('recursion_val')

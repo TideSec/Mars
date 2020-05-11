@@ -102,7 +102,7 @@ def start_scan():
 
 # new asset view
 @asset_management.route('/new-asset', methods=['GET', 'POST'])
-# @login_check
+@login_check
 def new_asset():
     # default asset view
     if request.method == "GET":
@@ -241,7 +241,7 @@ def new_asset():
 
 # asset view
 @asset_management.route('/asset-management', methods=['GET', 'POST'])
-# @login_check
+@login_check
 def asset_view():
     if request.method == "GET":
         # asset delete
@@ -376,7 +376,7 @@ def asset_view():
 
 # asset server view
 @asset_management.route('/asset-services', methods=['GET', 'POST'])
-# @login_check
+@login_check
 def asset_server():
     if request.method == "GET":
         plugin_info = connectiondb(plugin_db).find()
@@ -419,7 +419,7 @@ def asset_server():
 
 # asset info view
 @asset_management.route('/asset-info', methods=['GET', 'POST'])
-# @login_check
+@login_check
 def asset_info():
     if request.method == "GET":
         # plugin_info = connectiondb(plugin_db).find()

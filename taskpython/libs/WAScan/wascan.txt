@@ -1,4 +1,0 @@
-httpserver^Apache/2.4.23 (Win32) OpenSSL/1.0.2j PHP/5.4.45
-Os^Win32
-httpserver^Apache/2.4.23 (Win32) OpenSSL/1.0.2j PHP/5.4.45
-Os^Win32

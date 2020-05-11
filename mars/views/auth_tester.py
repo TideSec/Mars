@@ -21,7 +21,7 @@ config_db = db_name_conf()['config_db']
 
 
 @auth_tester.route('/new-auth-tester')
-#@login_check
+@login_check
 def view_new_auth_tester():
     # default view
     config_info = connectiondb(config_db).find_one({"config_name": config_name})
@@ -33,7 +33,7 @@ def view_new_auth_tester():
 
 
 @auth_tester.route('/auth-tester', methods=['POST'])
-#@login_check
+@login_check
 def new_auth_tester():
     # create new task
     username_list = request.form.get('username_list').split('\n')
@@ -66,7 +66,7 @@ def new_auth_tester():
 
 
 @auth_tester.route('/auth-tester-tasks', methods=['GET', 'POST'])
-#@login_check
+@login_check
 def task_management():
     if request.method == "GET":
         # delete task
@@ -107,7 +107,7 @@ def task_management():
 
 
 @auth_tester.route('/week-passwd-list', methods=['GET', 'POST'])
-#@login_check
+@login_check
 def week_passwd_list():
     if request.method == "GET":
         if request.args.get('delete'):

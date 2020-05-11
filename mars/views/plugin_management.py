@@ -37,7 +37,7 @@ plugin_db = db_name_conf()['plugin_db']
 
 
 @plugin_management.route('/plugin-management', methods=['GET', 'POST'])
-# @login_check
+@login_check
 def plugin_view():
     # delete plugin
     if request.method == "GET":
@@ -81,7 +81,7 @@ def plugin_view():
 
 
 @plugin_management.route('/plugin-upload', methods=['GET', 'POST'])
-# @login_check
+@login_check
 def plugin_upload():
     file_path = app.config.get('POCSUITE_PATH')
     file_data = request.files['file']

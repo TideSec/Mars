@@ -18,7 +18,7 @@ vul_db = db_name_conf()['vulscan_db']
 
 
 @vul_scanner.route('/vul-scanner', methods=['GET', 'POST'])
-#@login_check
+@login_check
 def vul_view():
     # scanner view
     if request.method == "GET":
@@ -66,7 +66,7 @@ def vul_view():
 
 
 @vul_scanner.route('/vul-tasks', methods=['GET', 'POST'])
-#@login_check
+@login_check
 def vul_tasks():
     # scanner view
     if request.method == "GET":

@@ -3,7 +3,7 @@
 # @Time    : 18/4/12 下午4:58
 # @Author  : 重剑无锋
 # @Site    : www.tidesec.com
-# @Email   : miacey@163.com
+# @Email   : 6295259@qq.com
 
 import requests,urlparse,threading,os,sys,time,urllib2
 import dns.resolver,random
