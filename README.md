@@ -66,7 +66,7 @@ docker run --name tide-mars  -p 5000:5000 -p 27017:27017  -p 13443:13443 -h tide
 
 启动Mars平台（如果主机配置低的话建议不启动Awvs，不然会卡死的，不想启动Awvs注释start.sh文件中第三行就可以）
 ```
-docker exec tide-mars  /bin/bash -c '/root/Mars/start.sh'
+docker exec tide-mars  /bin/bash -c '/bin/bash /root/Mars/start.sh'
 ```
 
 之后就可以使用浏览器访问`http://ip:5000`(这个ip是你的docker母机的地址)来访问mars了，登录密码默认为`tidesec`。
