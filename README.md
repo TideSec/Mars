@@ -33,9 +33,7 @@ Mars(战神),对之前的[WDScanner](https://github.com/TideSec/WDScanner)的全
  
 **tips：** 2020年5月11日，代码略有更新，主要修复几个bug，可在docker中的中进行代码更新。
 ```
-cd /root/
-rm -rf /root/Tide-Mars
-git clone https://github.com/TideSec/Mars Tide-Mars
+cd /root/Mars && git pull
 ```
 # Abstract
 
@@ -66,17 +64,10 @@ docker pull registry.cn-hangzhou.aliyuncs.com/secplus/mars:1.0
 docker run --name tide-mars  -p 5000:5000 -p 27017:27017  -p 13443:13443 -h tide-mars -d registry.cn-hangzhou.aliyuncs.com/secplus/mars:1.0  /usr/sbin/sshd -D
 ```
 
-进入容器
+启动Mars平台（如果主机配置低的话建议不启动Awvs，不然会卡死的，不想启动Awvs注释start.sh文件中第三行就可以）
 ```
-docker exec -it tide-mars /bin/bash
+docker exec tide-mars  /bin/bash -c '/root/Mars/start.sh'
 ```
-启动Mars平台（如果主机配置低的话建议不启动Awvs，不然会卡死的，不想启动Awvs删除start.sh文件中第三行就可以）
-```
-/bin/bash /root/Tide-Mars/start.sh
-```
-之后使用`ps -aux`可看到mar.py、数据库和wvs均已启动。
-
-![pic](images/pic21.png)
 
 之后就可以使用浏览器访问`http://ip:5000`(这个ip是你的docker母机的地址)来访问mars了，登录密码默认为`tidesec`。
 
@@ -86,11 +77,10 @@ docker exec -it tide-mars /bin/bash
 
 在创建容器以后，如果docker停止了，再次运行(不需要重新创建容器)只需要执行下面命令
 ```
-docker start tide-mars
-docker exec -it tide-mars /bin/bash
-/bin/bash /root/Tide-Mars/start.sh
+dk start tide-mars && docker exec tide-mars  /bin/bash -c '/root/Mars/start.sh'
 ```
---- 
+### 错误排查
+
 如果无法打开5000端口或13443端口、或者添加任务后无法扫描，可以进入docker进行人工排查。
 ```
 docker exec -it tide-mars /bin/bash
@@ -101,16 +91,20 @@ nohup mongod --dbpath=/data/db --bind_ip 0.0.0.0 --auth &
 ```
 启动mars控制台
 ```
-cd /root/Tide-Mars && python mars.py
+cd /root/Mars && python mars.py
 ```
 启动扫描任务
 ```
-cd /root/Tide-Mars/taskpython/ && python asset_task_scan_v1.0.py
+cd /root/Mars/taskpython/ && python asset_task_scan_v1.0.py
 ```
 启动awvs(可选，不启动时无法使用漏洞扫描功能)
 ```
 su -l acunetix -c /home/acunetix/.acunetix_trial/start.sh
 ```
+
+使用`ps -aux`可看到mar.py、数据库和wvs均已启动。
+
+![pic](images/pic21.png)
 
 ## 分布式部署
 
@@ -136,7 +130,7 @@ Mars支持分布式部署，可以多节点同时扫描，空闲节点会优先�
 
 ## 登录界面
 直接使用的vali-admin内置的一个lockscreen页面，改了个比较灰主流的背景，原谅我的审美。
-登录密码默认为`tidesec`，在配置文件`Tide-Mars/instance/config.py`中设置，我把它写死在`Tide-Mars/mars/templates/login.html`文件中了，可以自行修改。
+登录密码默认为`tidesec`，在配置文件`Mars/instance/config.py`中设置，可以自行修改，修改后需要重启下`python mars.py`脚本，先kill掉`python mars.py`进程，再执行一下`python mars.py`就行。
 
 ![pic](images/pic1.jpg)
 
@@ -208,7 +202,7 @@ poc结果
 
 ![pic](images/pic18.png)
 
-不过在使用docker环境执行awvs扫描时，发现占用资源很多wvs很容易报错，同时会导致web应用打开都比较费劲。自己部署的时候可以把wvs使用单独的服务器部署，然后在配置文件`Tide-Mars/instance/config.py`中修改awvs地址和api的key就可以。
+不过在使用docker环境执行awvs扫描时，发现占用资源很多wvs很容易报错，同时会导致web应用打开都比较费劲。自己部署的时候可以把wvs使用单独的服务器部署，然后在配置文件`Mars/instance/config.py`中修改awvs地址和api的key就可以。
 
 ![pic](images/pic13.png)
 
