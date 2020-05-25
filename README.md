@@ -77,7 +77,7 @@ docker exec tide-mars  /bin/bash -c '/root/Mars/start.sh'
 
 在创建容器以后，如果docker停止了，再次运行(不需要重新创建容器)只需要执行下面命令
 ```
-dk start tide-mars && docker exec tide-mars  /bin/bash -c '/root/Mars/start.sh'
+dk start tide-mars && docker exec tide-mars  /bin/bash -c '/bin/bash /root/Mars/start.sh'
 ```
 ### 错误排查
 
